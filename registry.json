@@ -1,0 +1,39 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "gasboost-ui",
+  "homepage": "https://github.com/gasboost/ui",
+  "items": [
+    {
+      "name": "appsscript-client",
+      "type": "registry:item",
+      "title": "Apps Script Client",
+      "description": "Typed GAS BOOST RPC client with shared authentication storage and metadata.",
+      "dependencies": [
+        "@gasboost/client@^0.5.0",
+        "@gasboost/auth-client@^0.5.0"
+      ],
+      "files": [
+        {
+          "path": "src/frontend/lib/appsscript.ts",
+          "type": "registry:file",
+          "target": "~/src/frontend/lib/appsscript.ts"
+        }
+      ]
+    },
+    {
+      "name": "auth-client",
+      "type": "registry:item",
+      "title": "GAS BOOST Auth Client",
+      "description": "GAS BOOST authentication using the RPC client's shared storage.",
+      "dependencies": ["@gasboost/auth-client@^0.5.0"],
+      "registryDependencies": ["gasboost/ui/appsscript-client"],
+      "files": [
+        {
+          "path": "src/frontend/lib/auth.ts",
+          "type": "registry:file",
+          "target": "~/src/frontend/lib/auth.ts"
+        }
+      ]
+    }
+  ]
+}

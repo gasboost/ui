@@ -1,0 +1,163 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      '@gasboost/app':
+        specifier: ^5.4.0
+        version: 5.4.0
+      '@gasboost/auth':
+        specifier: ^0.9.1
+        version: 0.9.1
+      '@gasboost/auth-app':
+        specifier: ^0.6.2
+        version: 0.6.2(@gasboost/app@5.4.0)(@gasboost/auth@0.9.1)(@gasboost/client@0.5.0)
+      '@gasboost/auth-client':
+        specifier: ^0.5.0
+        version: 0.5.0(@gasboost/client@0.5.0)
+      '@gasboost/auth-sheetorm':
+        specifier: ^0.4.1
+        version: 0.4.1(@gasboost/auth@0.9.1)(@gasboost/sheetorm@4.0.0(zod@4.6.7))
+      '@gasboost/client':
+        specifier: ^0.5.0
+        version: 0.5.0
+      '@gasboost/rls':
+        specifier: ^0.3.1
+        version: 0.3.1(zod@4.6.7)
+      '@gasboost/sheetorm':
+        specifier: ^4.0.0
+        version: 4.0.0(zod@4.6.7)
+      '@gasboost/table':
+        specifier: ^0.2.0
+        version: 0.2.0(zod@4.6.7)
+      zod:
+        specifier: ^4.6.7
+        version: 4.6.7
+    devDependencies:
+      '@types/google-apps-script':
+        specifier: ^2.0.15
+        version: 2.0.15
+
+packages:
+
+  '@gasboost/app@5.4.0':
+    resolution: {integrity: sha512-nLtICx7mnNUYgcfFZmbnHC9IvjxX9BcGVE+swbW9zKrQklc/atC1w3b9imkZlMMg8PpgNanhlmmUD0nr+X5SBw==}
+
+  '@gasboost/auth-app@0.6.2':
+    resolution: {integrity: sha512-d+glkYEDx3LNDYNQdEI0jPRHLoZimK86l9XRfNTIEpjGQ4K4zfUekh0kn3EL0ySk9zBUW6806do3KOiLY3MMkQ==}
+    peerDependencies:
+      '@gasboost/app': ^5.2.0
+      '@gasboost/auth': ^0.6.0 || ^0.7.0 || ^0.8.0 || ^0.9.0
+
+  '@gasboost/auth-client@0.5.0':
+    resolution: {integrity: sha512-6xt8WraVAE6+gHX/mcAA4QHyEJxWTNkNKlt2QjjbjORyGxvLTcJ+DM1lpYJ/830SywIraLUow3qZJ0Ys+737Gg==}
+    peerDependencies:
+      '@gasboost/client': ^0.5.0
+    peerDependenciesMeta:
+      '@gasboost/client':
+        optional: true
+
+  '@gasboost/auth-sheetorm@0.4.1':
+    resolution: {integrity: sha512-MSBaRJweGPFZpiNqU+t/q3SydPlFkrbCVB+Zj9EIcK2tOt2zyIB8ZcOau/UErtWS6DLzuzzuGgOS/Ec0gaLURg==}
+    peerDependencies:
+      '@gasboost/auth': ^0.5.0 || ^0.6.0 || ^0.7.0 || ^0.8.0 || ^0.9.0
+      '@gasboost/sheetorm': ^3.1.0 || ^4.0.0
+
+  '@gasboost/auth@0.9.1':
+    resolution: {integrity: sha512-3wjnZrDygJqZ6cIbLsDh1iyXGC8O/x0+uj91tHN6lVWmY7olbVmNbCfmOQNU4H2i5X7lW5q2z43AwdubcH+QSg==}
+
+  '@gasboost/client@0.5.0':
+    resolution: {integrity: sha512-kPARvI0Qsg758uxe1UQcGZhFXRiwTnn3iZWyKMIFaNnkXnzjHHaze1AmD27ZUnVMHqwPs/qOqpEq0XK6dWKLng==}
+
+  '@gasboost/query@1.2.0':
+    resolution: {integrity: sha512-WaNAWmUmO0RBZ+nJXvONj5Mzp3O7VqjIcLlNch0O+67qQd5sXSZ0g4epTIp4iyjvDH5ah40BZO7JFCReH9zwPA==}
+
+  '@gasboost/rls@0.3.1':
+    resolution: {integrity: sha512-/9ioGbTUxtumu2RSEO22LNu8LwAqhsvPGY5tbv2KyYUC8krTi5XuVJZxfy9mEueuz/MLZJJpvMcGCwXg7kDP4w==}
+    peerDependencies:
+      zod: ^4.5.4
+
+  '@gasboost/sheetorm@4.0.0':
+    resolution: {integrity: sha512-QE+qhK4nFFCMwqDS87AyPlfBvRSUoR950fxix7qQAfULmBMVtX3RRhj2gciHVsUipPyqrRlPmcAbcrze683O0Q==}
+    peerDependencies:
+      zod: ^4.5.4
+
+  '@gasboost/table@0.1.0':
+    resolution: {integrity: sha512-eJ0QNsbYSB/MB+XGLw5jiTVqL6I26+9HiZ6Uj4TmU9tGHQfiJl21EWgUgDr1HHtjxYKrVA3V12ShRWnni82/6A==}
+    peerDependencies:
+      zod: ^4.5.4
+
+  '@gasboost/table@0.2.0':
+    resolution: {integrity: sha512-kZxYjHR3wclyk2g/jh9JHA8odyI177SUtAziRy1Ae3vuOpE1SnVAgX8kV1O+NPH+pqlFC/RswDvWSm2bKHF89Q==}
+    peerDependencies:
+      zod: ^4.5.4
+
+  '@types/google-apps-script@2.0.15':
+    resolution: {integrity: sha512-Mmz0zPNG6airLVK1KDy7sgU26HYhSdooOd5riBWMYk5iLel8jCeQu4EaOg7JIwMdEFhad/pNEeLpMt2dPlgnxQ==}
+
+  zod@4.6.7:
+    resolution: {integrity: sha512-g8W2D2kU6a8untc053fX1uVBKzM7yqAxW/3zwk83+6RyF2+SKOuV+c0wBDhUwzV1PaGapmZH+rmcUzPf+3CGwg==}
+
+snapshots:
+
+  '@gasboost/app@5.4.0': {}
+
+  '@gasboost/auth-app@0.6.2(@gasboost/app@5.4.0)(@gasboost/auth@0.9.1)(@gasboost/client@0.5.0)':
+    dependencies:
+      '@gasboost/app': 5.4.0
+      '@gasboost/auth': 0.9.1
+      '@gasboost/auth-client': 0.5.0(@gasboost/client@0.5.0)
+    transitivePeerDependencies:
+      - '@gasboost/client'
+
+  '@gasboost/auth-client@0.5.0(@gasboost/client@0.5.0)':
+    optionalDependencies:
+      '@gasboost/client': 0.5.0
+
+  '@gasboost/auth-sheetorm@0.4.1(@gasboost/auth@0.9.1)(@gasboost/sheetorm@4.0.0(zod@4.6.7))':
+    dependencies:
+      '@gasboost/auth': 0.9.1
+      '@gasboost/sheetorm': 4.0.0(zod@4.6.7)
+      zod: 4.6.7
+
+  '@gasboost/auth@0.9.1':
+    dependencies:
+      '@gasboost/table': 0.1.0(zod@4.6.7)
+      zod: 4.6.7
+
+  '@gasboost/client@0.5.0': {}
+
+  '@gasboost/query@1.2.0(zod@4.6.7)':
+    dependencies:
+      '@gasboost/table': 0.2.0(zod@4.6.7)
+    transitivePeerDependencies:
+      - zod
+
+  '@gasboost/rls@0.3.1(zod@4.6.7)':
+    dependencies:
+      '@gasboost/table': 0.1.0(zod@4.6.7)
+      zod: 4.6.7
+
+  '@gasboost/sheetorm@4.0.0(zod@4.6.7)':
+    dependencies:
+      '@gasboost/query': 1.2.0(zod@4.6.7)
+      '@gasboost/rls': 0.3.1(zod@4.6.7)
+      '@gasboost/table': 0.2.0(zod@4.6.7)
+      zod: 4.6.7
+
+  '@gasboost/table@0.1.0(zod@4.6.7)':
+    dependencies:
+      zod: 4.6.7
+
+  '@gasboost/table@0.2.0(zod@4.6.7)':
+    dependencies:
+      zod: 4.6.7
+
+  '@types/google-apps-script@2.0.15': {}
+
+  zod@4.6.7: {}
