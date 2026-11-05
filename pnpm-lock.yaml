@@ -26,6 +26,9 @@ importers:
       '@gasboost/client':
         specifier: ^0.5.0
         version: 0.5.0
+      '@gasboost/react':
+        specifier: ^0.4.0
+        version: 0.4.0(react@19.3.1)
       '@gasboost/rls':
         specifier: ^0.3.1
         version: 0.3.1(zod@4.6.7)
@@ -54,6 +57,14 @@ packages:
       '@gasboost/app': ^5.2.0
       '@gasboost/auth': ^0.6.0 || ^0.7.0 || ^0.8.0 || ^0.9.0
 
+  '@gasboost/auth-client@0.2.0':
+    resolution: {integrity: sha512-0NVkO/j1i6rHRgETRZl1+IFjTrZAQOurB+7UUrLaXiaAo+c/O+RtXmy4TCYleDbgw0u9sl9U95gfR7Xi1DpJvg==}
+    peerDependencies:
+      '@gasboost/client': ^0.5.0
+    peerDependenciesMeta:
+      '@gasboost/client':
+        optional: true
+
   '@gasboost/auth-client@0.5.0':
     resolution: {integrity: sha512-6xt8WraVAE6+gHX/mcAA4QHyEJxWTNkNKlt2QjjbjORyGxvLTcJ+DM1lpYJ/830SywIraLUow3qZJ0Ys+737Gg==}
     peerDependencies:
@@ -76,6 +87,11 @@ packages:
 
   '@gasboost/query@1.2.0':
     resolution: {integrity: sha512-WaNAWmUmO0RBZ+nJXvONj5Mzp3O7VqjIcLlNch0O+67qQd5sXSZ0g4epTIp4iyjvDH5ah40BZO7JFCReH9zwPA==}
+
+  '@gasboost/react@0.4.0':
+    resolution: {integrity: sha512-XtVSoPZTrf9ApJfzHlJkUGGlccQyIhjoPlX+xxmgaYaigWXsbNEiDUqrY4KWjkNUva34CEPm93QPeWCG9r8EtQ==}
+    peerDependencies:
+      react: ^19
 
   '@gasboost/rls@0.3.1':
     resolution: {integrity: sha512-/9ioGbTUxtumu2RSEO22LNu8LwAqhsvPGY5tbv2KyYUC8krTi5XuVJZxfy9mEueuz/MLZJJpvMcGCwXg7kDP4w==}
@@ -100,6 +116,10 @@ packages:
   '@types/google-apps-script@2.0.15':
     resolution: {integrity: sha512-Mmz0zPNG6airLVK1KDy7sgU26HYhSdooOd5riBWMYk5iLel8jCeQu4EaOg7JIwMdEFhad/pNEeLpMt2dPlgnxQ==}
 
+  react@19.3.1:
+    resolution: {integrity: sha512-QNhWdt7nrgVWWQG58QuGsAR3jv3Hbe4mb4vz7w2csnHavciZJgda1CPNaldF6eVxv90ud3jUXpKlHL69gO38yw==}
+    engines: {node: '>=0.10.0'}
+
   zod@4.6.7:
     resolution: {integrity: sha512-g8W2D2kU6a8untc053fX1uVBKzM7yqAxW/3zwk83+6RyF2+SKOuV+c0wBDhUwzV1PaGapmZH+rmcUzPf+3CGwg==}
 
@@ -114,6 +134,10 @@ snapshots:
       '@gasboost/auth-client': 0.5.0(@gasboost/client@0.5.0)
     transitivePeerDependencies:
       - '@gasboost/client'
+
+  '@gasboost/auth-client@0.2.0(@gasboost/client@0.5.0)':
+    optionalDependencies:
+      '@gasboost/client': 0.5.0
 
   '@gasboost/auth-client@0.5.0(@gasboost/client@0.5.0)':
     optionalDependencies:
@@ -138,6 +162,12 @@ snapshots:
     transitivePeerDependencies:
       - zod
 
+  '@gasboost/react@0.4.0(react@19.3.1)':
+    dependencies:
+      '@gasboost/auth-client': 0.2.0(@gasboost/client@0.5.0)
+      '@gasboost/client': 0.5.0
+      react: 19.3.1
+
   '@gasboost/rls@0.3.1(zod@4.6.7)':
     dependencies:
       '@gasboost/table': 0.1.0(zod@4.6.7)
@@ -159,5 +189,7 @@ snapshots:
       zod: 4.6.7
 
   '@types/google-apps-script@2.0.15': {}
+
+  react@19.3.1: {}
 
   zod@4.6.7: {}

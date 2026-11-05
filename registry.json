@@ -34,6 +34,21 @@
           "target": "~/src/frontend/lib/auth.ts"
         }
       ]
+    },
+    {
+      "name": "auth-context",
+      "type": "registry:item",
+      "title": "GAS BOOST Auth Context",
+      "description": "React context for GAS BOOST authentication.",
+      "dependencies": ["@gasboost/react@^0.4.0"],
+      "registryDependencies": ["gasboost/ui/auth-client"],
+      "files": [
+        {
+          "path": "src/frontend/contexts/AuthContext.tsx",
+          "type": "registry:file",
+          "target": "~/src/frontend/contexts/AuthContext.tsx"
+        }
+      ]
     }
   ]
 }
