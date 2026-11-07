@@ -1,5 +1,13 @@
 {
   "compilerOptions": {
-    "types": ["google-apps-script"]
-  }
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "types": ["google-apps-script", "react"],
+    "jsx": "react-jsx",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true
+  },
+  "include": ["src", "tests"]
 }
