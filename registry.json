@@ -10,7 +10,7 @@
       "description": "Typed GAS BOOST RPC client with shared authentication storage and metadata.",
       "dependencies": [
         "@gasboost/client@^0.5.0",
-        "@gasboost/auth-client@^0.5.0"
+        "@gasboost/auth-client@^0.6.0"
       ],
       "files": [
         {
@@ -25,7 +25,7 @@
       "type": "registry:item",
       "title": "GAS BOOST Auth Client",
       "description": "GAS BOOST authentication using the RPC client's shared storage.",
-      "dependencies": ["@gasboost/auth-client@^0.5.0"],
+      "dependencies": ["@gasboost/auth-client@^0.6.0"],
       "registryDependencies": ["gasboost/ui/appsscript-client"],
       "files": [
         {
@@ -40,13 +40,33 @@
       "type": "registry:item",
       "title": "GAS BOOST Auth Context",
       "description": "React context for GAS BOOST authentication.",
-      "dependencies": ["@gasboost/react@^0.4.0"],
+      "dependencies": ["@gasboost/react@^0.4.1"],
       "registryDependencies": ["gasboost/ui/auth-client"],
       "files": [
         {
           "path": "src/frontend/contexts/AuthContext.tsx",
           "type": "registry:file",
           "target": "~/src/frontend/contexts/AuthContext.tsx"
+        }
+      ]
+    },
+    {
+      "name": "guard",
+      "type": "registry:item",
+      "title": "GAS BOOST Guard",
+      "description": "React components for authentication and permission guarding.",
+      "dependencies": ["@gasboost/auth@^0.10.0", "react-router-dom@^7.18.5"],
+      "registryDependencies": ["gasboost/ui/auth-context"],
+      "files": [
+        {
+          "path": "src/frontend/components/Guard.tsx",
+          "type": "registry:file",
+          "target": "~/src/frontend/components/Guard.tsx"
+        },
+        {
+          "path": "src/shared/routes.ts",
+          "type": "registry:file",
+          "target": "~/src/shared/routes.ts"
         }
       ]
     }

@@ -3,7 +3,8 @@ import {
   SheetOrmAuthRepository,
   SheetOrmAuthorizationRepository,
 } from "@gasboost/auth-sheetorm";
-import { policy } from "../../shared/authorization";
+import { signUpEnabled } from "../../shared/auth";
+import { policy } from "../../shared/policy";
 import { authTables, authorizationTables } from "../../shared/tables";
 import { db } from "./db";
 
@@ -20,7 +21,7 @@ export const auth = new AppsScriptAuth({
 
   emailPassword: {
     enabled: true,
-    isSignupEnabled: true,
+    isSignupEnabled: signUpEnabled.emailPassword,
     pepper: pepper || "",
     passwordReset: {
       delivery: {
@@ -37,7 +38,7 @@ export const auth = new AppsScriptAuth({
 
   appsScript: {
     enabled: false,
-    isSignupEnabled: false,
+    isSignupEnabled: signUpEnabled.appsScript,
   },
 
   runtime: {
@@ -49,6 +50,12 @@ export const auth = new AppsScriptAuth({
 
   session: {
     storageType: "cache",
+  },
+
+  user: {
+    data: async ({ user }) => ({
+      permissions: await authorization.resolve(user.id),
+    }),
   },
 });
 
