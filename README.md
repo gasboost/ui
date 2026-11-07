@@ -43,7 +43,7 @@ transportを省略しているため、標準の`AppsScriptTransport`（`google.
 pnpm dlx shadcn@latest add gasboost/ui/guard
 ```
 
-`Guard.tsx` と `src/shared/routes.ts` を配布します。`auth-context` → `auth-client` → `appsscript-client` も依存として導入されます。React 19、React Router 7 の環境で、`AuthProvider` と Router の内側に Guard を配置してください。ルーター本体、遷移先の画面、メニュー、バックエンドは利用側で用意します。
+`Guard.tsx` と `src/shared/routes.ts` を配布します。`auth-context` → `auth-client` → `appsscript-client` も依存として導入されます。`@gasboost/react@^0.4.1`、React 19、React Router 7 の環境で、`AuthProvider` と Router の内側に Guard を配置してください。ルーター本体、遷移先の画面、メニュー、バックエンドは利用側で用意します。
 
 ### 既存の routes がある場合
 
@@ -116,7 +116,7 @@ import { AuthGuard, PermissionGuard } from "./frontend/components/Guard";
 </Routes>;
 ```
 
-両Guardはセッション復元中や認証操作中に何も表示せず、未認証ならログイン画面へ `replace` で遷移します。`PermissionGuard` は `policy.can(user.data.permissions, requirement)` で同期判定し、権限不足ならforbidden画面へ遷移します。判定のためのRPCは発行しません（AuthProviderによるセッション復元は別途行われます）。`requirement` は共有policyから推論され、不正なresource/actionは型エラーになります。
+両Guardはセッション復元中や認証操作中、および `useAuth().isSessionRestoreFailed` がtrueの間は何も表示しません。復元失敗時にAuthClientが古いユーザー・token・permissionsを保持していても、保護ページは表示せず、画面遷移もしません。復元失敗の表示や再試行UIが必要な場合はGuardの外側で同フラグを参照してください。復元が正常に完了して未認証なら、ログイン画面へ `replace` で遷移します。`PermissionGuard` は `policy.can(user.data.permissions, requirement)` で同期判定し、権限不足ならforbidden画面へ遷移します。判定のためのRPCは発行しません（AuthProviderによるセッション復元は別途行われます）。`requirement` は共有policyから推論され、不正なresource/actionは型エラーになります。
 
 Guardはページアクセス用です。ボタンの表示制御には `policy.can()` を直接使ってください。**バックエンドでも実行時の認可が必要です。** クライアントのpermissionsはログイン・セッション復元等で取得した時点の情報です。
 
@@ -130,6 +130,6 @@ pnpm test
 pnpm registry:smoke
 ```
 
-`registry:smoke` はregistryをbuildし、一時的なconsumerへ実際のshadcn CLIで依存を含めてインストールします。共有policyからの型推論、不正なresource/actionの型エラー、上書きを断った既存routesの保持を確認します。npmへのアクセスが必要です。生成物は `dist/registry` に出力し、Gitの管理対象に含めません。GAS実環境へのデプロイは行いません。
+`registry:smoke` はregistryをbuildし、一時的なconsumerへ実際のshadcn CLIで依存を含めてインストールします。`@gasboost/react@^0.4.1` の依存宣言と復元失敗フラグの型、共有policyからの型推論、不正なresource/actionの型エラー、上書きを断った既存routesの保持を確認します。npmへのアクセスが必要です。生成物は `dist/registry` に出力し、Gitの管理対象に含めません。GAS実環境へのデプロイは行いません。
 
 TypeScriptの `skipLibCheck` はGASとDOMの `MimeType` 宣言の競合を避けるために指定しています。配布ソースとconsumerの型チェックは有効です。

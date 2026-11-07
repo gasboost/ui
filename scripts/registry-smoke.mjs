@@ -19,6 +19,10 @@ for (const { name } of registry.items) {
     ),
   );
 }
+assert.ok(
+  items.get("auth-context").dependencies.includes("@gasboost/react@^0.4.1"),
+  "auth-context must require the session restoration failure flag",
+);
 // Resolve this checkout's dependency chain, rather than published main.
 const server = createServer((req, res) => {
   const name = req.url.slice(1).replace(/\.json$/, "");
@@ -170,7 +174,8 @@ const badResource = <PermissionGuard requirement={{ unknown: ["read"] }}>No</Per
 // @ts-expect-error Unknown action
 const badAction = <PermissionGuard requirement={{ staff: ["delete"] }}>No</PermissionGuard>;
 function check() {
-  const { user } = useAuth();
+  const { user, isSessionRestoreFailed } = useAuth();
+  const restoreFailed: boolean = isSessionRestoreFailed;
   const permissions: readonly ("staff:create" | "staff:read")[] | undefined = user?.data.permissions;
   // @ts-expect-error User data must remain typed
   user?.data.missing;

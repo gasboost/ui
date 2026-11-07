@@ -40,7 +40,7 @@
       "type": "registry:item",
       "title": "GAS BOOST Auth Context",
       "description": "React context for GAS BOOST authentication.",
-      "dependencies": ["@gasboost/react@^0.4.0"],
+      "dependencies": ["@gasboost/react@^0.4.1"],
       "registryDependencies": ["gasboost/ui/auth-client"],
       "files": [
         {

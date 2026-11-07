@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import type { ReactNode } from "react";
 import { AuthGuard, PermissionGuard } from "../src/frontend/components/Guard";
-import { AuthProvider } from "../src/frontend/contexts/AuthContext";
+import { AuthProvider, useAuth } from "../src/frontend/contexts/AuthContext";
 import { routes } from "../src/shared/routes";
 import { rpc, storage, testAuth, user } from "./fixtures/auth";
 
@@ -15,6 +15,15 @@ vi.mock("../src/shared/policy", async () => {
   const { AuthorizationPolicy } = await import("@gasboost/auth/authorization");
   return { policy: new AuthorizationPolicy({ staff: ["read", "create"] }) };
 });
+
+function AuthStatus() {
+  const { isLoading, isSessionRestoreFailed } = useAuth();
+  return (
+    <output data-testid="auth-status">
+      {isLoading ? "loading" : isSessionRestoreFailed ? "failed" : "ready"}
+    </output>
+  );
+}
 
 function mount(guard: (children: ReactNode) => ReactNode) {
   const router = createMemoryRouter(
@@ -28,6 +37,7 @@ function mount(guard: (children: ReactNode) => ReactNode) {
   );
   render(
     <AuthProvider>
+      <AuthStatus />
       <RouterProvider router={router} />
     </AuthProvider>,
   );
@@ -120,9 +130,30 @@ for (const [name, guard] of Object.entries(guards)) {
 
     it("fails closed when restoration fails", async () => {
       rpc.getSession.mockRejectedValueOnce(new Error("Session expired"));
-      mount(guard);
-      expect(await screen.findByText("Login page")).toBeTruthy();
+      const router = mount(guard);
+      expect(await screen.findByText("failed")).toBeTruthy();
       expect(screen.queryByText("Protected content")).toBeNull();
+      expect(router.state.location.pathname).toBe("/protected");
+    });
+
+    it("does not expose a retained user or permissions after restoration rejects", async () => {
+      await testAuth.signIn({
+        email: "alice@example.com",
+        password: "password",
+      });
+      const previousUser = testAuth.getUser();
+      const previousToken = testAuth.getToken();
+      rpc.getSession.mockRejectedValueOnce(
+        new Error("Restoration unavailable"),
+      );
+      const router = mount(guard);
+      expect(screen.queryByText("Protected content")).toBeNull();
+      expect(await screen.findByText("failed")).toBeTruthy();
+      expect(testAuth.getUser()).toBe(previousUser);
+      expect(testAuth.getUser()?.data.permissions).toEqual(["staff:read"]);
+      expect(testAuth.getToken()).toBe(previousToken);
+      expect(screen.queryByText("Protected content")).toBeNull();
+      expect(router.state.location.pathname).toBe("/protected");
     });
   });
 }

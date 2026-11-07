@@ -7,9 +7,9 @@ import { useAuth } from "../contexts/AuthContext";
 type GuardProps = { children: ReactNode };
 
 export function AuthGuard({ children }: GuardProps) {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, isSessionRestoreFailed } = useAuth();
 
-  if (isLoading) return null;
+  if (isLoading || isSessionRestoreFailed) return null;
   if (!user) return <Navigate to={routes.user.login} replace />;
 
   return <>{children}</>;
@@ -23,9 +23,9 @@ export function PermissionGuard({
   requirement,
   children,
 }: PermissionGuardProps) {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, isSessionRestoreFailed } = useAuth();
 
-  if (isLoading) return null;
+  if (isLoading || isSessionRestoreFailed) return null;
   if (!user) return <Navigate to={routes.user.login} replace />;
 
   if (!policy.can(user.data.permissions, requirement)) {
