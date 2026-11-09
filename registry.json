@@ -66,10 +66,15 @@
       "dependencies": [
         "@gasboost/auth@^0.10.0",
         "react-router-dom@^7.18.5",
-        "@gasboost/bootstrap@^0.4.0"
+        "@gasboost/bootstrap@^0.4.0",
+        "@gasboost/client@^0.6.0",
+        "@tanstack/react-query@^5.107.1"
       ],
       "registryDependencies": [
-        "gasboost/ui/auth-context"
+        "gasboost/ui/auth-context",
+        "alert",
+        "button",
+        "card"
       ],
       "files": [
         {
@@ -81,6 +86,21 @@
           "path": "src/shared/routes.ts",
           "type": "registry:file",
           "target": "~/src/shared/routes.ts"
+        },
+        {
+          "path": "src/frontend/lib/bootstrap.ts",
+          "type": "registry:file",
+          "target": "~/src/frontend/lib/bootstrap.ts"
+        },
+        {
+          "path": "src/frontend/features/bootstrap/BootstrapPage.tsx",
+          "type": "registry:file",
+          "target": "~/src/frontend/features/bootstrap/BootstrapPage.tsx"
+        },
+        {
+          "path": "src/frontend/features/bootstrap/mutations.ts",
+          "type": "registry:file",
+          "target": "~/src/frontend/features/bootstrap/mutations.ts"
         }
       ]
     },

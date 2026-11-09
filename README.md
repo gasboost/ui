@@ -52,12 +52,12 @@ pnpm dlx shadcn@latest add gasboost/ui/guard
 ```ts
 // src/shared/routes.ts — 利用側で編集・拡張する共通定義
 export const routes = {
-  user: { login: "/login" },
+  auth: { signIn: "/sign-in" },
   system: { forbidden: "/forbidden" },
 } as const;
 ```
 
-`routes.user.login` / `routes.system.forbidden` の値を変更すると、Guard の遷移先も変わります。Route、Link、メニューなどもこの同じ定義を参照してください。初期値の画面がない場合は、利用側のURLへ変更します。
+`routes.auth.signIn` / `routes.system.forbidden` の値を変更すると、Guard の遷移先も変わります。Route、Link、メニューなどもこの同じ定義を参照してください。初期値の画面がない場合は、利用側のURLへ変更します。
 
 ### 共有policyとバックエンドの準備
 
@@ -95,7 +95,7 @@ import { AuthGuard, PermissionGuard } from "./frontend/components/Guard";
 
 // AuthProvider と Router の内側。各 Page は利用側で定義します。
 <Routes>
-  <Route path={routes.user.login} element={<LoginPage />} />
+  <Route path={routes.auth.signIn} element={<LoginPage />} />
   <Route path={routes.system.forbidden} element={<ForbiddenPage />} />
   <Route
     path="/account"
@@ -133,3 +133,30 @@ pnpm registry:smoke
 `registry:smoke` はregistryをbuildし、一時的なconsumerへ実際のshadcn CLIで依存を含めてインストールします。`@gasboost/react@^0.4.1` の依存宣言と復元失敗フラグの型、共有policyからの型推論、不正なresource/actionの型エラー、上書きを断った既存routesの保持を確認します。npmへのアクセスが必要です。生成物は `dist/registry` に出力し、Gitの管理対象に含めません。GAS実環境へのデプロイは行いません。
 
 TypeScriptの `skipLibCheck` はGASとDOMの `MimeType` 宣言の競合を避けるために指定しています。配布ソースとconsumerの型チェックは有効です。
+
+## Bootstrap の Provider 配置
+
+`pnpm dlx shadcn@latest add gasboost/ui/bootstrap` で初期設定ページと Guard を導入します。
+`BootstrapGuard` は未初期化なら `BootstrapPage` をその場で表示します。
+ページの `useMutation` に必要な `QueryClientProvider` は Guard の外側に、認証復元を行う `AuthProvider` は Guard の内側に配置します。
+
+```tsx
+<AppsScriptRouter>
+  <HashRouter>
+    <AppsScriptProvider client={client}>
+      <QueryClientProvider client={queryClient}>
+        <BootstrapProvider initialState={bootstrap}>
+          <BootstrapGuard>
+            <AuthProvider>
+              <App />
+            </AuthProvider>
+          </BootstrapGuard>
+        </BootstrapProvider>
+      </QueryClientProvider>
+    </AppsScriptProvider>
+  </HashRouter>
+</AppsScriptRouter>
+```
+
+`bootstrap` は `lib/bootstrap.ts` の初期値、`queryClient` は TanStack Query の `new QueryClient()` です。
+`AppsScriptRouter` が同期した URL の token はリダイレクトせず `useSearchParams()` から読み取り、RPC の `initialized === true` の場合だけ `BootstrapProvider` の状態を更新します。

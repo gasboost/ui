@@ -4,6 +4,7 @@ import { Navigate } from "react-router-dom";
 import { policy } from "../../shared/policy";
 import { routes } from "../../shared/routes";
 import { useAuth } from "../contexts/AuthContext";
+import { BootstrapPage } from "../features/bootstrap/BootstrapPage";
 
 type BootstrapGuardProps = {
   children: ReactNode;
@@ -12,7 +13,7 @@ type BootstrapGuardProps = {
 export function BootstrapGuard({ children }: BootstrapGuardProps) {
   const { initialized } = useBootstrap();
   if (!initialized) {
-    return <Navigate to={routes.system.bootstrap} replace />;
+    return <BootstrapPage />;
   }
 
   return children;

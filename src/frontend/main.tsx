@@ -17,15 +17,15 @@ root.render(
   <AppsScriptRouter>
     <HashRouter>
       <AppsScriptProvider client={client}>
-        <BootstrapProvider initialState={bootstrap}>
-          <BootstrapGuard>
-            <AuthProvider>
-              <QueryClientProvider client={queryClient}>
+        <QueryClientProvider client={queryClient}>
+          <BootstrapProvider initialState={bootstrap}>
+            <BootstrapGuard>
+              <AuthProvider>
                 <App />
-              </QueryClientProvider>
-            </AuthProvider>
-          </BootstrapGuard>
-        </BootstrapProvider>
+              </AuthProvider>
+            </BootstrapGuard>
+          </BootstrapProvider>
+        </QueryClientProvider>
       </AppsScriptProvider>
     </HashRouter>
   </AppsScriptRouter>,

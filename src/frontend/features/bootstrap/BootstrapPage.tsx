@@ -8,9 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useBootstrap } from "@gasboost/bootstrap/react";
 import { useMutation } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
-import { bootstrap } from "../../lib/bootstrap";
 import { bootstrapMutations } from "./mutations";
 
 type BootstrapPageProps = {
@@ -18,28 +18,20 @@ type BootstrapPageProps = {
 };
 
 export function BootstrapPage({ onInitialized }: BootstrapPageProps) {
+  const { initialized, setInitialized } = useBootstrap();
   const [params] = useSearchParams();
   const token = params.get("token");
 
   const initialize = useMutation({
     ...bootstrapMutations.initialize(),
-    onSuccess: () => {
+    onSuccess: (result) => {
+      if (result.initialized !== true) return;
+      setInitialized(true);
       onInitialized?.();
     },
   });
 
-  if (!bootstrap) {
-    return (
-      <Alert variant="destructive">
-        <AlertTitle>初期状態を取得できません</AlertTitle>
-        <AlertDescription>
-          アプリケーションを再読み込みしてください。
-        </AlertDescription>
-      </Alert>
-    );
-  }
-
-  if (bootstrap.initialized || initialize.isSuccess) {
+  if (initialized || initialize.isSuccess) {
     return (
       <Card className="w-full max-w-md">
         <CardHeader>
