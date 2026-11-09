@@ -25,11 +25,16 @@ function AuthStatus() {
   );
 }
 
-function mount(guard: (children: ReactNode) => ReactNode) {
+function mount(guard: ReactNode) {
   const router = createMemoryRouter(
     [
-      { path: "/protected", element: guard(<div>Protected content</div>) },
-      { path: routes.user.login, element: <div>Login page</div> },
+      {
+        element: guard,
+        children: [
+          { path: "/protected", element: <div>Protected content</div> },
+        ],
+      },
+      { path: routes.auth.signIn, element: <div>Login page</div> },
       { path: routes.system.forbidden, element: <div>Forbidden page</div> },
       { path: "/before", element: <div>Previous page</div> },
     ],
@@ -56,11 +61,9 @@ beforeEach(async () => {
 afterEach(cleanup);
 
 const guards = {
-  AuthGuard: (children: ReactNode) => <AuthGuard>{children}</AuthGuard>,
-  PermissionGuard: (children: ReactNode) => (
-    <PermissionGuard requirement={{ staff: ["read"] }}>
-      {children}
-    </PermissionGuard>
+  AuthGuard: <AuthGuard />,
+  PermissionGuard: (
+    <PermissionGuard requirement={{ staff: ["read"] }} children={null} />
   ),
 };
 
@@ -188,11 +191,11 @@ it("rechecks permissions after switching to a different user", async () => {
 
 it("uses customized routes for both redirects", async () => {
   const original = {
-    login: routes.user.login,
+    login: routes.auth.signIn,
     forbidden: routes.system.forbidden,
   };
   // Simulate a consumer editing the shared routes module.
-  Object.assign(routes.user, { login: "/custom-login" });
+  Object.assign(routes.auth, { signIn: "/custom-login" });
   Object.assign(routes.system, { forbidden: "/custom-forbidden" });
   try {
     storage.remove();
@@ -211,7 +214,7 @@ it("uses customized routes for both redirects", async () => {
       expect(deniedRouter.state.location.pathname).toBe("/custom-forbidden"),
     );
   } finally {
-    Object.assign(routes.user, { login: original.login });
+    Object.assign(routes.auth, { signIn: original.login });
     Object.assign(routes.system, { forbidden: original.forbidden });
   }
 });

@@ -36,8 +36,10 @@ const server = createServer((req, res) => {
 await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
 const base = `http://127.0.0.1:${server.address().port}`;
 for (const item of items.values()) {
-  item.registryDependencies = (item.registryDependencies ?? []).map(
-    (name) => `${base}/${name.split("/").at(-1)}.json`,
+  item.registryDependencies = (item.registryDependencies ?? []).map((name) =>
+    name.startsWith("gasboost/ui/")
+      ? `${base}/${name.split("/").at(-1)}.json`
+      : name,
   );
 }
 function run(command, args, input) {
@@ -73,6 +75,8 @@ try {
                 "@gasboost/auth-client",
                 "@gasboost/client",
                 "@gasboost/react",
+                "@gasboost/bootstrap",
+                "@tanstack/react-query",
                 "react-router-dom",
               ].includes(name),
           ),
@@ -99,7 +103,7 @@ try {
         strict: true,
         skipLibCheck: true,
         noEmit: true,
-        paths: { "@/*": ["./src/*"] },
+        paths: { "@/*": ["./src/frontend/*"] },
         types: ["react", "google-apps-script"],
       },
       include: ["src"],
@@ -161,6 +165,7 @@ try {
   await writeFile(
     join(consumer, "src/shared/policy.ts"),
     `import { AuthorizationPolicy } from "@gasboost/auth/authorization";
+export const roles = { admin: "admin", user: "user" };
 export const policy = new AuthorizationPolicy({ staff: ["create", "read"] });\n`,
   );
   await writeFile(
@@ -193,7 +198,7 @@ async function restored() {
     "Installed consumer typecheck and negative resource/action checks passed.",
   );
   const customRoutes =
-    'export const routes = { user: { login: "/custom-login" }, system: { forbidden: "/custom-forbidden" }, home: "/home" } as const;\n';
+    'export const routes = { auth: { signIn: "/custom-login" }, system: { forbidden: "/custom-forbidden" }, home: "/home" } as const;\n';
   await writeFile(join(consumer, "src/shared/routes.ts"), customRoutes);
   console.log(
     await run(

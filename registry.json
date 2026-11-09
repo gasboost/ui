@@ -9,7 +9,7 @@
       "title": "Apps Script Client",
       "description": "Typed GAS BOOST RPC client with shared authentication storage and metadata.",
       "dependencies": [
-        "@gasboost/client@^0.5.0",
+        "@gasboost/client@^0.6.0",
         "@gasboost/auth-client@^0.6.0"
       ],
       "files": [
@@ -50,12 +50,17 @@
         }
       ]
     },
+
     {
       "name": "guard",
       "type": "registry:item",
       "title": "GAS BOOST Guard",
-      "description": "React components for authentication and permission guarding.",
-      "dependencies": ["@gasboost/auth@^0.10.0", "react-router-dom@^7.18.5"],
+      "description": "React guards for bootstrap, authentication, and authorization.",
+      "dependencies": [
+        "@gasboost/auth@^0.10.0",
+        "@gasboost/bootstrap@^0.4.0",
+        "react-router-dom@^7.18.5"
+      ],
       "registryDependencies": ["gasboost/ui/auth-context"],
       "files": [
         {
@@ -67,6 +72,42 @@
           "path": "src/shared/routes.ts",
           "type": "registry:file",
           "target": "~/src/shared/routes.ts"
+        }
+      ]
+    },
+    {
+      "name": "bootstrap",
+      "type": "registry:item",
+      "title": "GAS BOOST Bootstrap",
+      "description": "First-run initialization page with typed RPC errors and manual retry.",
+      "dependencies": [
+        "@gasboost/bootstrap@^0.4.0",
+        "@gasboost/client@^0.6.0",
+        "@tanstack/react-query@^5.107.1",
+        "react-router-dom@^7.18.5"
+      ],
+      "registryDependencies": [
+        "gasboost/ui/guard",
+        "gasboost/ui/appsscript-client",
+        "alert",
+        "button",
+        "card"
+      ],
+      "files": [
+        {
+          "path": "src/frontend/lib/bootstrap.ts",
+          "type": "registry:file",
+          "target": "~/src/frontend/lib/bootstrap.ts"
+        },
+        {
+          "path": "src/frontend/features/bootstrap/BootstrapPage.tsx",
+          "type": "registry:file",
+          "target": "~/src/frontend/features/bootstrap/BootstrapPage.tsx"
+        },
+        {
+          "path": "src/frontend/features/bootstrap/mutations.ts",
+          "type": "registry:file",
+          "target": "~/src/frontend/features/bootstrap/mutations.ts"
         }
       ]
     }
