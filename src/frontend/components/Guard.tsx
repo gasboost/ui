@@ -1,33 +1,31 @@
 import { useBootstrap } from "@gasboost/bootstrap/react";
 import type { ReactNode } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { policy } from "../../shared/policy";
 import { routes } from "../../shared/routes";
 import { useAuth } from "../contexts/AuthContext";
-import { BootstrapPage } from "../features/bootstrap/BootstrapPage";
 
-type BootstrapGuardProps = {
-  children: ReactNode;
-};
-
-export function BootstrapGuard({ children }: BootstrapGuardProps) {
+export function BootstrapGuard() {
   const { initialized } = useBootstrap();
+  const { search } = useLocation();
   if (!initialized) {
-    return <BootstrapPage />;
+    return (
+      <Navigate to={{ pathname: routes.system.bootstrap, search }} replace />
+    );
   }
 
-  return children;
+  return <Outlet />;
 }
 
 type GuardProps = { children: ReactNode };
 
-export function AuthGuard({ children }: GuardProps) {
+export function AuthGuard() {
   const { user, isLoading, isSessionRestoreFailed } = useAuth();
 
   if (isLoading || isSessionRestoreFailed) return null;
   if (!user) return <Navigate to={routes.auth.signIn} replace />;
 
-  return <>{children}</>;
+  return <Outlet />;
 }
 
 type PermissionGuardProps = GuardProps & {
@@ -47,5 +45,5 @@ export function PermissionGuard({
     return <Navigate to={routes.system.forbidden} replace />;
   }
 
-  return <>{children}</>;
+  return <Outlet />;
 }

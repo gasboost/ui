@@ -10,11 +10,13 @@ import {
   waitFor,
 } from "@testing-library/react";
 import { StrictMode } from "react";
-import { HashRouter } from "react-router-dom";
+import { HashRouter, Link, Outlet, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { BootstrapGuard } from "../src/frontend/components/Guard";
 import { AuthProvider } from "../src/frontend/contexts/AuthContext";
 import { client } from "../src/frontend/lib/appsscript";
+import { BootstrapPage } from "../src/frontend/features/bootstrap/BootstrapPage";
+import { routes } from "../src/shared/routes";
 import { rpc, storage, testAuth, user } from "./fixtures/auth";
 
 const { initializeApp, getLocation } = vi.hoisted(() => {
@@ -63,11 +65,24 @@ function mount(initialized = false) {
           <AppsScriptProvider client={client}>
             <QueryClientProvider client={new QueryClient()}>
               <BootstrapProvider initialState={{ initialized }}>
-                <BootstrapGuard>
-                  <AuthProvider>
-                    <App />
-                  </AuthProvider>
-                </BootstrapGuard>
+                <Link to="/">通常アプリへ</Link>
+                <Routes>
+                  <Route
+                    path={routes.system.bootstrap}
+                    element={<BootstrapPage />}
+                  />
+                  <Route element={<BootstrapGuard />}>
+                    <Route
+                      element={
+                        <AuthProvider>
+                          <Outlet />
+                        </AuthProvider>
+                      }
+                    >
+                      <Route path="/" element={<App />} />
+                    </Route>
+                  </Route>
+                </Routes>
               </BootstrapProvider>
             </QueryClientProvider>
           </AppsScriptProvider>
@@ -83,7 +98,9 @@ it("shows the setup page without mounting auth or the app and preserves the GAS 
   expect(
     await screen.findByRole("button", { name: "初期設定を開始" }),
   ).toBeTruthy();
-  expect(window.location.hash).toBe("#/?token=setup-token");
+  expect(window.location.hash).toBe(
+    `#${routes.system.bootstrap}?token=setup-token`,
+  );
   expect(getLocation).toHaveBeenCalled();
   expect(appMounted).not.toHaveBeenCalled();
   expect(rpc.getSession).not.toHaveBeenCalled();
@@ -112,6 +129,10 @@ it("delivers the synchronized token to RPC and opens the guard only after succes
   expect(appMounted).not.toHaveBeenCalled();
   expect(rpc.getSession).not.toHaveBeenCalled();
   finish({ initialized: true });
+  expect(await screen.findByText("初期設定が完了しています")).toBeTruthy();
+  expect(appMounted).not.toHaveBeenCalled();
+  expect(rpc.getSession).not.toHaveBeenCalled();
+  fireEvent.click(screen.getByRole("link", { name: "通常アプリへ" }));
   expect(await screen.findByText("通常アプリ")).toBeTruthy();
   await waitFor(() => expect(rpc.getSession).toHaveBeenCalled());
 });
@@ -131,8 +152,13 @@ it.each(["RPC failure", "incomplete result"])(
     expect(appMounted).not.toHaveBeenCalled();
     expect(rpc.getSession).not.toHaveBeenCalled();
     expect(initializeApp).toHaveBeenCalledTimes(1);
-    expect(window.location.hash).toBe("#/?token=setup-token");
+    expect(window.location.hash).toBe(
+      `#${routes.system.bootstrap}?token=setup-token`,
+    );
     fireEvent.click(retry);
+    expect(await screen.findByText("初期設定が完了しています")).toBeTruthy();
+    expect(appMounted).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("link", { name: "通常アプリへ" }));
     expect(await screen.findByText("通常アプリ")).toBeTruthy();
     expect(initializeApp).toHaveBeenCalledTimes(2);
   },

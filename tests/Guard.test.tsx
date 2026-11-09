@@ -25,10 +25,15 @@ function AuthStatus() {
   );
 }
 
-function mount(guard: (children: ReactNode) => ReactNode) {
+function mount(guard: ReactNode) {
   const router = createMemoryRouter(
     [
-      { path: "/protected", element: guard(<div>Protected content</div>) },
+      {
+        element: guard,
+        children: [
+          { path: "/protected", element: <div>Protected content</div> },
+        ],
+      },
       { path: routes.auth.signIn, element: <div>Login page</div> },
       { path: routes.system.forbidden, element: <div>Forbidden page</div> },
       { path: "/before", element: <div>Previous page</div> },
@@ -56,11 +61,9 @@ beforeEach(async () => {
 afterEach(cleanup);
 
 const guards = {
-  AuthGuard: (children: ReactNode) => <AuthGuard>{children}</AuthGuard>,
-  PermissionGuard: (children: ReactNode) => (
-    <PermissionGuard requirement={{ staff: ["read"] }}>
-      {children}
-    </PermissionGuard>
+  AuthGuard: <AuthGuard />,
+  PermissionGuard: (
+    <PermissionGuard requirement={{ staff: ["read"] }} children={null} />
   ),
 };
 
