@@ -8,7 +8,7 @@ import { policy } from "../../shared/policy";
 import { authTables, authorizationTables } from "../../shared/tables";
 import { db } from "./db";
 
-const repository = new SheetOrmAuthRepository({
+export const repository = new SheetOrmAuthRepository({
   db,
   schema: authTables.schema,
 });

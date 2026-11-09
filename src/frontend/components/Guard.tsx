@@ -1,8 +1,22 @@
+import { useBootstrap } from "@gasboost/bootstrap/react";
 import type { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { policy } from "../../shared/policy";
 import { routes } from "../../shared/routes";
 import { useAuth } from "../contexts/AuthContext";
+
+type BootstrapGuardProps = {
+  children: ReactNode;
+};
+
+export function BootstrapGuard({ children }: BootstrapGuardProps) {
+  const { initialized } = useBootstrap();
+  if (!initialized) {
+    return <Navigate to={routes.system.bootstrap} replace />;
+  }
+
+  return children;
+}
 
 type GuardProps = { children: ReactNode };
 
@@ -10,7 +24,7 @@ export function AuthGuard({ children }: GuardProps) {
   const { user, isLoading, isSessionRestoreFailed } = useAuth();
 
   if (isLoading || isSessionRestoreFailed) return null;
-  if (!user) return <Navigate to={routes.user.login} replace />;
+  if (!user) return <Navigate to={routes.auth.signIn} replace />;
 
   return <>{children}</>;
 }
@@ -26,7 +40,7 @@ export function PermissionGuard({
   const { user, isLoading, isSessionRestoreFailed } = useAuth();
 
   if (isLoading || isSessionRestoreFailed) return null;
-  if (!user) return <Navigate to={routes.user.login} replace />;
+  if (!user) return <Navigate to={routes.auth.signIn} replace />;
 
   if (!policy.can(user.data.permissions, requirement)) {
     return <Navigate to={routes.system.forbidden} replace />;
