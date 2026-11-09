@@ -25,12 +25,8 @@
       "type": "registry:item",
       "title": "GAS BOOST Auth Client",
       "description": "GAS BOOST authentication using the RPC client's shared storage.",
-      "dependencies": [
-        "@gasboost/auth-client@^0.6.0"
-      ],
-      "registryDependencies": [
-        "gasboost/ui/appsscript-client"
-      ],
+      "dependencies": ["@gasboost/auth-client@^0.6.0"],
+      "registryDependencies": ["gasboost/ui/appsscript-client"],
       "files": [
         {
           "path": "src/frontend/lib/auth.ts",
@@ -44,12 +40,8 @@
       "type": "registry:item",
       "title": "GAS BOOST Auth Context",
       "description": "React context for GAS BOOST authentication.",
-      "dependencies": [
-        "@gasboost/react@^0.4.1"
-      ],
-      "registryDependencies": [
-        "gasboost/ui/auth-client"
-      ],
+      "dependencies": ["@gasboost/react@^0.4.1"],
+      "registryDependencies": ["gasboost/ui/auth-client"],
       "files": [
         {
           "path": "src/frontend/contexts/AuthContext.tsx",
@@ -58,24 +50,18 @@
         }
       ]
     },
+
     {
       "name": "guard",
       "type": "registry:item",
       "title": "GAS BOOST Guard",
-      "description": "React components for authentication and permission guarding.",
+      "description": "React guards for bootstrap, authentication, and authorization.",
       "dependencies": [
         "@gasboost/auth@^0.10.0",
-        "react-router-dom@^7.18.5",
         "@gasboost/bootstrap@^0.4.0",
-        "@gasboost/client@^0.6.0",
-        "@tanstack/react-query@^5.107.1"
+        "react-router-dom@^7.18.5"
       ],
-      "registryDependencies": [
-        "gasboost/ui/auth-context",
-        "alert",
-        "button",
-        "card"
-      ],
+      "registryDependencies": ["gasboost/ui/auth-context"],
       "files": [
         {
           "path": "src/frontend/components/Guard.tsx",
@@ -86,21 +72,6 @@
           "path": "src/shared/routes.ts",
           "type": "registry:file",
           "target": "~/src/shared/routes.ts"
-        },
-        {
-          "path": "src/frontend/lib/bootstrap.ts",
-          "type": "registry:file",
-          "target": "~/src/frontend/lib/bootstrap.ts"
-        },
-        {
-          "path": "src/frontend/features/bootstrap/BootstrapPage.tsx",
-          "type": "registry:file",
-          "target": "~/src/frontend/features/bootstrap/BootstrapPage.tsx"
-        },
-        {
-          "path": "src/frontend/features/bootstrap/mutations.ts",
-          "type": "registry:file",
-          "target": "~/src/frontend/features/bootstrap/mutations.ts"
         }
       ]
     },
@@ -108,7 +79,7 @@
       "name": "bootstrap",
       "type": "registry:item",
       "title": "GAS BOOST Bootstrap",
-      "description": "First-run initialization gate and setup page with typed RPC errors and manual retry.",
+      "description": "First-run initialization page with typed RPC errors and manual retry.",
       "dependencies": [
         "@gasboost/bootstrap@^0.4.0",
         "@gasboost/client@^0.6.0",
@@ -117,6 +88,7 @@
       ],
       "registryDependencies": [
         "gasboost/ui/guard",
+        "gasboost/ui/appsscript-client",
         "alert",
         "button",
         "card"

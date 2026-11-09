@@ -32,10 +32,7 @@ type PermissionGuardProps = GuardProps & {
   requirement: Parameters<typeof policy.can>[1];
 };
 
-export function PermissionGuard({
-  requirement,
-  children,
-}: PermissionGuardProps) {
+export function PermissionGuard({ requirement }: PermissionGuardProps) {
   const { user, isLoading, isSessionRestoreFailed } = useAuth();
 
   if (isLoading || isSessionRestoreFailed) return null;
