@@ -24,8 +24,8 @@ importers:
         specifier: ^0.9.0
         version: 0.9.0(@gasboost/app@5.5.0)(@gasboost/auth@0.12.0)(@gasboost/client@0.7.0)
       '@gasboost/auth-client':
-        specifier: ^0.8.0
-        version: 0.8.0(@gasboost/client@0.7.0)
+        specifier: ^0.8.1
+        version: 0.8.1(@gasboost/client@0.7.0)
       '@gasboost/auth-sheetorm':
         specifier: ^0.5.1
         version: 0.5.1(@gasboost/auth@0.12.0)(@gasboost/sheetorm@4.0.0(zod@4.6.7))
@@ -36,8 +36,8 @@ importers:
         specifier: ^0.7.0
         version: 0.7.0
       '@gasboost/react':
-        specifier: ^0.4.1
-        version: 0.4.1(react@19.3.1)
+        specifier: ^0.4.2
+        version: 0.4.2(react@19.3.1)
       '@gasboost/rls':
         specifier: ^0.3.1
         version: 0.3.1(zod@4.6.7)
@@ -356,10 +356,10 @@ packages:
       '@gasboost/client':
         optional: true
 
-  '@gasboost/auth-client@0.8.0':
-    resolution: {integrity: sha512-TGy17s1uI5xFFG9k6cfJo9WKbPFP5o6S3WJEAL+mlhRFx6zU72GSvo3fxjQLDL05aO9yz2f7j8ISVxu6RdMDCg==}
+  '@gasboost/auth-client@0.8.1':
+    resolution: {integrity: sha512-s9HKkUXGs31aQawOL8eY25ZJjyDQ0N+dO4JLzUmqGJ5cMB9jcEOy/QrynViPL5+SLoORbmLWS0G9VV5JGq9ItA==}
     peerDependencies:
-      '@gasboost/client': ^0.5.0 || ^0.6.0
+      '@gasboost/client': ^0.5.0 || ^0.6.0 || ^0.7.0
     peerDependenciesMeta:
       '@gasboost/client':
         optional: true
@@ -382,9 +382,6 @@ packages:
       react:
         optional: true
 
-  '@gasboost/client@0.5.0':
-    resolution: {integrity: sha512-kPARvI0Qsg758uxe1UQcGZhFXRiwTnn3iZWyKMIFaNnkXnzjHHaze1AmD27ZUnVMHqwPs/qOqpEq0XK6dWKLng==}
-
   '@gasboost/client@0.7.0':
     resolution: {integrity: sha512-Ft2EfKhxbLAbY7ZGZFCN9QqEkFUwILtzmV/YoMm81J9L1q9+SIdHFSg6P+kqziSzAdC1NyaJw8+xxTJYq47lZg==}
 
@@ -397,8 +394,8 @@ packages:
   '@gasboost/query@1.2.0':
     resolution: {integrity: sha512-WaNAWmUmO0RBZ+nJXvONj5Mzp3O7VqjIcLlNch0O+67qQd5sXSZ0g4epTIp4iyjvDH5ah40BZO7JFCReH9zwPA==}
 
-  '@gasboost/react@0.4.1':
-    resolution: {integrity: sha512-SDI7mNV4aVsjiCloFTJua9PDiazy/a9u868psLep+PaakPXuFaROA6y5hY38KHmH/cdDpJAcJanzwO+UCTLAkw==}
+  '@gasboost/react@0.4.2':
+    resolution: {integrity: sha512-EwYghwGcvLKVPqfeQCl+5COoj3zp7b03HSM3RlufJcKWazLtbKfLCrRmMEIi2TlRTgs2yopTUeLXQpDj6UMmhA==}
     peerDependencies:
       react: ^19
 
@@ -2401,15 +2398,15 @@ snapshots:
     dependencies:
       '@gasboost/app': 5.5.0
       '@gasboost/auth': 0.12.0
-      '@gasboost/auth-client': 0.8.0(@gasboost/client@0.7.0)
+      '@gasboost/auth-client': 0.8.1(@gasboost/client@0.7.0)
     transitivePeerDependencies:
       - '@gasboost/client'
 
-  '@gasboost/auth-client@0.2.0(@gasboost/client@0.5.0)':
+  '@gasboost/auth-client@0.2.0(@gasboost/client@0.7.0)':
     optionalDependencies:
-      '@gasboost/client': 0.5.0
+      '@gasboost/client': 0.7.0
 
-  '@gasboost/auth-client@0.8.0(@gasboost/client@0.7.0)':
+  '@gasboost/auth-client@0.8.1(@gasboost/client@0.7.0)':
     optionalDependencies:
       '@gasboost/client': 0.7.0
 
@@ -2431,8 +2428,6 @@ snapshots:
     optionalDependencies:
       react: 19.3.1
 
-  '@gasboost/client@0.5.0': {}
-
   '@gasboost/client@0.7.0': {}
 
   '@gasboost/fake-core@0.4.0': {}
@@ -2451,10 +2446,10 @@ snapshots:
     transitivePeerDependencies:
       - zod
 
-  '@gasboost/react@0.4.1(react@19.3.1)':
+  '@gasboost/react@0.4.2(react@19.3.1)':
     dependencies:
-      '@gasboost/auth-client': 0.2.0(@gasboost/client@0.5.0)
-      '@gasboost/client': 0.5.0
+      '@gasboost/auth-client': 0.2.0(@gasboost/client@0.7.0)
+      '@gasboost/client': 0.7.0
       react: 19.3.1
 
   '@gasboost/rls@0.3.1(zod@4.6.7)':

@@ -74,7 +74,7 @@ export const policy = new AuthorizationPolicy({
   .linkRole("staff", { staff: ["read"] });
 ```
 
-バックエンドは `@gasboost/auth@^0.12.0` / `@gasboost/auth-app@^0.9.0`、フロントエンドは `@gasboost/auth-client@^0.8.0` を使用します。SheetORMの認証repositoryを使う場合は `@gasboost/auth-sheetorm@^0.5.1` が必要です。既存の `AppsScriptAuth` オプションに以下を追加し、そのauthを `handlers(auth)` に渡してください。
+バックエンドは `@gasboost/auth@^0.12.0` / `@gasboost/auth-app@^0.9.0`、フロントエンドは `@gasboost/auth-client@^0.8.1` を使用します。SheetORMの認証repositoryを使う場合は `@gasboost/auth-sheetorm@^0.5.1` が必要です。既存の `AppsScriptAuth` オプションに以下を追加し、そのauthを `handlers(auth)` に渡してください。
 
 ```ts
 user: {
@@ -204,7 +204,7 @@ import { ForbiddenPage } from "./frontend/components/ForbiddenPage";
 pnpm dlx shadcn@latest add gasboost/ui/server-job
 ```
 
-`ServerJobList.tsx` / `ServerJobItem.tsx` と、Badge / Button / DropdownMenu / Spinnerを導入します。`@gasboost/client@^0.7.0` と `@gasboost/react@^0.4.1` を使用します。
+`ServerJobList.tsx` / `ServerJobItem.tsx` と、Badge / Button / DropdownMenu / Spinnerを導入します。`@gasboost/client@^0.7.0` と `@gasboost/react@^0.4.2` を使用します。
 
 既存の `src/frontend/lib/appsscript.ts` をカスタマイズしている場合は上書きを断り、**既存の呼び出しから `jobs` もexport**してください。クライアントを二重生成すると別のキューになります。
 

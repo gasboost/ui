@@ -10,7 +10,7 @@
       "description": "Typed GAS BOOST RPC client with shared authentication storage and metadata.",
       "dependencies": [
         "@gasboost/client@^0.7.0",
-        "@gasboost/auth-client@^0.8.0"
+        "@gasboost/auth-client@^0.8.1"
       ],
       "files": [
         {
@@ -25,7 +25,7 @@
       "type": "registry:item",
       "title": "GAS BOOST Auth Client",
       "description": "GAS BOOST authentication using the RPC client's shared storage.",
-      "dependencies": ["@gasboost/auth-client@^0.8.0"],
+      "dependencies": ["@gasboost/auth-client@^0.8.1"],
       "registryDependencies": ["gasboost/ui/appsscript-client"],
       "files": [
         {
@@ -280,7 +280,7 @@
       "description": "Compact RPC queue status menu with pending cancellation and failed job retry.",
       "dependencies": [
         "@gasboost/client@^0.7.0",
-        "@gasboost/react@^0.4.1",
+        "@gasboost/react@^0.4.2",
         "lucide-react@^1.70.0"
       ],
       "registryDependencies": [

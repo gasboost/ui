@@ -27,7 +27,7 @@ assert.ok(
   items.get("server-job").dependencies.includes("@gasboost/client@^0.7.0"),
 );
 assert.ok(
-  items.get("server-job").dependencies.includes("@gasboost/react@^0.4.1"),
+  items.get("server-job").dependencies.includes("@gasboost/react@^0.4.2"),
 );
 assert.ok(
   items
@@ -223,6 +223,16 @@ async function restored() {
   // @ts-expect-error Restored user data must remain typed
   session?.user.data.missing;
 }\n`,
+  );
+  // shadcn may have resolved peers permissively. A frozen install alone skips
+  // resolution and does not catch incompatible peers already in its lockfile.
+  await rm(join(consumer, "pnpm-lock.yaml"));
+  console.log(
+    await run("pnpm", [
+      "install",
+      "--lockfile-only",
+      "--strict-peer-dependencies",
+    ]),
   );
   console.log(
     await run("pnpm", [
