@@ -27,7 +27,7 @@ assert.ok(
   items.get("server-job").dependencies.includes("@gasboost/client@^0.7.0"),
 );
 assert.ok(
-  items.get("server-job").dependencies.includes("@gasboost/react@^0.4.2"),
+  items.get("server-job").dependencies.includes("@gasboost/react@^0.4.3"),
 );
 assert.ok(
   items

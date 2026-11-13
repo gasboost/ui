@@ -280,7 +280,7 @@
       "description": "Compact RPC queue status menu with pending cancellation and failed job retry.",
       "dependencies": [
         "@gasboost/client@^0.7.0",
-        "@gasboost/react@^0.4.2",
+        "@gasboost/react@^0.4.3",
         "lucide-react@^1.70.0"
       ],
       "registryDependencies": [

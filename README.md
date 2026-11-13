@@ -204,7 +204,7 @@ import { ForbiddenPage } from "./frontend/components/ForbiddenPage";
 pnpm dlx shadcn@latest add gasboost/ui/server-job
 ```
 
-`ServerJobList.tsx` / `ServerJobItem.tsx` と、Badge / Button / DropdownMenu / Spinnerを導入します。`@gasboost/client@^0.7.0` と `@gasboost/react@^0.4.2` を使用します。
+`ServerJobList.tsx` / `ServerJobItem.tsx` と、Badge / Button / DropdownMenu / Spinnerを導入します。`@gasboost/client@^0.7.0` と `@gasboost/react@^0.4.3` を使用します。
 
 既存の `src/frontend/lib/appsscript.ts` をカスタマイズしている場合は上書きを断り、**既存の呼び出しから `jobs` もexport**してください。クライアントを二重生成すると別のキューになります。
 

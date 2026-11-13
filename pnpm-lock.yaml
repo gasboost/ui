@@ -36,8 +36,8 @@ importers:
         specifier: ^0.7.0
         version: 0.7.0
       '@gasboost/react':
-        specifier: ^0.4.2
-        version: 0.4.2(react@19.3.1)
+        specifier: ^0.4.3
+        version: 0.4.3(react@19.3.1)
       '@gasboost/rls':
         specifier: ^0.3.1
         version: 0.3.1(zod@4.6.7)
@@ -348,14 +348,6 @@ packages:
       '@gasboost/app': ^5.5.0
       '@gasboost/auth': ^0.12.0
 
-  '@gasboost/auth-client@0.2.0':
-    resolution: {integrity: sha512-0NVkO/j1i6rHRgETRZl1+IFjTrZAQOurB+7UUrLaXiaAo+c/O+RtXmy4TCYleDbgw0u9sl9U95gfR7Xi1DpJvg==}
-    peerDependencies:
-      '@gasboost/client': ^0.5.0
-    peerDependenciesMeta:
-      '@gasboost/client':
-        optional: true
-
   '@gasboost/auth-client@0.8.1':
     resolution: {integrity: sha512-s9HKkUXGs31aQawOL8eY25ZJjyDQ0N+dO4JLzUmqGJ5cMB9jcEOy/QrynViPL5+SLoORbmLWS0G9VV5JGq9ItA==}
     peerDependencies:
@@ -394,8 +386,8 @@ packages:
   '@gasboost/query@1.2.0':
     resolution: {integrity: sha512-WaNAWmUmO0RBZ+nJXvONj5Mzp3O7VqjIcLlNch0O+67qQd5sXSZ0g4epTIp4iyjvDH5ah40BZO7JFCReH9zwPA==}
 
-  '@gasboost/react@0.4.2':
-    resolution: {integrity: sha512-EwYghwGcvLKVPqfeQCl+5COoj3zp7b03HSM3RlufJcKWazLtbKfLCrRmMEIi2TlRTgs2yopTUeLXQpDj6UMmhA==}
+  '@gasboost/react@0.4.3':
+    resolution: {integrity: sha512-4FtsToHcKLfXD+jNVWjrkMoMxNObm9am9/D2dC2PMlSOb+JexNM4sGFWD5l+9xXCrv5EjzY6D9Qb4F5NYiFdqg==}
     peerDependencies:
       react: ^19
 
@@ -2402,10 +2394,6 @@ snapshots:
     transitivePeerDependencies:
       - '@gasboost/client'
 
-  '@gasboost/auth-client@0.2.0(@gasboost/client@0.7.0)':
-    optionalDependencies:
-      '@gasboost/client': 0.7.0
-
   '@gasboost/auth-client@0.8.1(@gasboost/client@0.7.0)':
     optionalDependencies:
       '@gasboost/client': 0.7.0
@@ -2446,9 +2434,9 @@ snapshots:
     transitivePeerDependencies:
       - zod
 
-  '@gasboost/react@0.4.2(react@19.3.1)':
+  '@gasboost/react@0.4.3(react@19.3.1)':
     dependencies:
-      '@gasboost/auth-client': 0.2.0(@gasboost/client@0.7.0)
+      '@gasboost/auth-client': 0.8.1(@gasboost/client@0.7.0)
       '@gasboost/client': 0.7.0
       react: 19.3.1
 
