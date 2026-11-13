@@ -203,6 +203,75 @@
           "target": "~/src/frontend/components/ForbiddenPage.tsx"
         }
       ]
+    },
+    {
+      "name": "forgot-password-page",
+      "type": "registry:item",
+      "title": "ForgotPasswordPage",
+      "description": "Password reset form with validation, safe RPC feedback, and manual retry.",
+      "dependencies": [
+        "@gasboost/client@^0.6.0",
+        "@hookform/resolvers@^7.0.5",
+        "@tanstack/react-query@^5.107.1",
+        "react-hook-form@^7.91.0",
+        "react-router-dom@^7.18.5",
+        "zod@^4.6.7"
+      ],
+      "registryDependencies": [
+        "gasboost/ui/appsscript-client",
+        "input",
+        "alert",
+        "button",
+        "card",
+        "label"
+      ],
+      "files": [
+        {
+          "path": "src/frontend/components/ForgotPasswordPage.tsx",
+          "type": "registry:file",
+          "target": "~/src/frontend/components/ForgotPasswordPage.tsx"
+        },
+        {
+          "path": "src/shared/routes.ts",
+          "type": "registry:file",
+          "target": "~/src/shared/routes.ts"
+        }
+      ]
+    },
+    {
+      "name": "reset-password-page",
+      "type": "registry:item",
+      "title": "ResetPasswordPage",
+      "description": "Password reset form with validation, safe RPC feedback, and manual retry.",
+      "dependencies": [
+        "@gasboost/auth@^0.12.0",
+        "@gasboost/client@^0.6.0",
+        "@hookform/resolvers@^7.0.5",
+        "@tanstack/react-query@^5.107.1",
+        "react-hook-form@^7.91.0",
+        "react-router-dom@^7.18.5",
+        "zod@^4.6.7"
+      ],
+      "registryDependencies": [
+        "gasboost/ui/appsscript-client",
+        "gasboost/ui/password-input",
+        "alert",
+        "button",
+        "card",
+        "label"
+      ],
+      "files": [
+        {
+          "path": "src/frontend/components/ResetPasswordPage.tsx",
+          "type": "registry:file",
+          "target": "~/src/frontend/components/ResetPasswordPage.tsx"
+        },
+        {
+          "path": "src/shared/routes.ts",
+          "type": "registry:file",
+          "target": "~/src/shared/routes.ts"
+        }
+      ]
     }
   ]
 }

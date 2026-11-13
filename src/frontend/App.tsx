@@ -1,6 +1,8 @@
 import { Outlet, Route, Routes } from "react-router-dom";
 import { routes } from "../shared/routes";
 import { BootstrapPage } from "./components/BootstrapPage";
+import { ForgotPasswordPage } from "./components/ForgotPasswordPage";
+import { ResetPasswordPage } from "./components/ResetPasswordPage";
 import { ForbiddenPage } from "./components/ForbiddenPage";
 import { AuthGuard, BootstrapGuard } from "./components/Guard";
 import { SignInPage } from "./components/SignInPage";
@@ -23,6 +25,14 @@ export default function App() {
             </AuthProvider>
           }
         >
+          <Route
+            path={routes.auth.forgotPassword}
+            element={<ForgotPasswordPage />}
+          />
+          <Route
+            path={routes.auth.resetPassword}
+            element={<ResetPasswordPage />}
+          />
           <Route path={routes.auth.signUp} element={<SignUpPage />} />
           <Route path={routes.auth.signIn} element={<SignInPage />} />
 

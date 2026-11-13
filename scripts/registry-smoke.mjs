@@ -144,6 +144,8 @@ try {
       `${base}/sign-up-page.json`,
       `${base}/bootstrap.json`,
       `${base}/auth-error-pages.json`,
+      `${base}/forgot-password-page.json`,
+      `${base}/reset-password-page.json`,
       "--yes",
     ]),
   );
@@ -232,6 +234,37 @@ async function restored() {
     customRoutes,
   );
   console.log("Existing consumer routes preserved when overwrite is declined.");
+  await rm(join(consumer, "src/guard.types.tsx"));
+  for (const [name, component, other] of [
+    ["forgot-password-page", "ForgotPasswordPage", "ResetPasswordPage"],
+    ["reset-password-page", "ResetPasswordPage", "ForgotPasswordPage"],
+  ]) {
+    await rm(join(consumer, "src/frontend"), { recursive: true, force: true });
+    await rm(join(consumer, "src/shared/routes.ts"));
+    console.log(
+      await run(process.execPath, [
+        cli,
+        "add",
+        `${base}/${name}.json`,
+        "--yes",
+      ]),
+    );
+    const installed = await readFile(
+      join(consumer, `src/frontend/components/${component}.tsx`),
+      "utf8",
+    );
+    assert.ok(installed.includes(items.get(name).files[0].content.trim()));
+    await assert.rejects(
+      readFile(join(consumer, `src/frontend/components/${other}.tsx`)),
+      { code: "ENOENT" },
+    );
+    await assert.rejects(
+      readFile(join(consumer, "src/frontend/components/Guard.tsx")),
+      { code: "ENOENT" },
+    );
+    await run(join(root, "node_modules/.bin/tsc"), ["--project", consumer]);
+    console.log(`${name} standalone consumer install and typecheck passed.`);
+  }
 } finally {
   server.close();
   await rm(consumer, { recursive: true, force: true });
