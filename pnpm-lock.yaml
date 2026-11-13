@@ -22,10 +22,10 @@ importers:
         version: 0.12.0
       '@gasboost/auth-app':
         specifier: ^0.9.0
-        version: 0.9.0(@gasboost/app@5.5.0)(@gasboost/auth@0.12.0)(@gasboost/client@0.6.0)
+        version: 0.9.0(@gasboost/app@5.5.0)(@gasboost/auth@0.12.0)(@gasboost/client@0.7.0)
       '@gasboost/auth-client':
-        specifier: ^0.8.0
-        version: 0.8.0(@gasboost/client@0.6.0)
+        specifier: ^0.8.1
+        version: 0.8.1(@gasboost/client@0.7.0)
       '@gasboost/auth-sheetorm':
         specifier: ^0.5.1
         version: 0.5.1(@gasboost/auth@0.12.0)(@gasboost/sheetorm@4.0.0(zod@4.6.7))
@@ -33,11 +33,11 @@ importers:
         specifier: ^0.5.0
         version: 0.5.0(@gasboost/auth@0.12.0)(react@19.3.1)
       '@gasboost/client':
-        specifier: ^0.6.0
-        version: 0.6.0
+        specifier: ^0.7.0
+        version: 0.7.0
       '@gasboost/react':
-        specifier: ^0.4.1
-        version: 0.4.1(react@19.3.1)
+        specifier: ^0.4.3
+        version: 0.4.3(react@19.3.1)
       '@gasboost/rls':
         specifier: ^0.3.1
         version: 0.3.1(zod@4.6.7)
@@ -96,6 +96,9 @@ importers:
       '@testing-library/react':
         specifier: ^16.3.3
         version: 16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      '@testing-library/user-event':
+        specifier: ^14.6.10
+        version: 14.6.10(@testing-library/dom@10.4.2)
       '@types/google-apps-script':
         specifier: ^2.0.15
         version: 2.0.15
@@ -345,18 +348,10 @@ packages:
       '@gasboost/app': ^5.5.0
       '@gasboost/auth': ^0.12.0
 
-  '@gasboost/auth-client@0.2.0':
-    resolution: {integrity: sha512-0NVkO/j1i6rHRgETRZl1+IFjTrZAQOurB+7UUrLaXiaAo+c/O+RtXmy4TCYleDbgw0u9sl9U95gfR7Xi1DpJvg==}
+  '@gasboost/auth-client@0.8.1':
+    resolution: {integrity: sha512-s9HKkUXGs31aQawOL8eY25ZJjyDQ0N+dO4JLzUmqGJ5cMB9jcEOy/QrynViPL5+SLoORbmLWS0G9VV5JGq9ItA==}
     peerDependencies:
-      '@gasboost/client': ^0.5.0
-    peerDependenciesMeta:
-      '@gasboost/client':
-        optional: true
-
-  '@gasboost/auth-client@0.8.0':
-    resolution: {integrity: sha512-TGy17s1uI5xFFG9k6cfJo9WKbPFP5o6S3WJEAL+mlhRFx6zU72GSvo3fxjQLDL05aO9yz2f7j8ISVxu6RdMDCg==}
-    peerDependencies:
-      '@gasboost/client': ^0.5.0 || ^0.6.0
+      '@gasboost/client': ^0.5.0 || ^0.6.0 || ^0.7.0
     peerDependenciesMeta:
       '@gasboost/client':
         optional: true
@@ -379,11 +374,8 @@ packages:
       react:
         optional: true
 
-  '@gasboost/client@0.5.0':
-    resolution: {integrity: sha512-kPARvI0Qsg758uxe1UQcGZhFXRiwTnn3iZWyKMIFaNnkXnzjHHaze1AmD27ZUnVMHqwPs/qOqpEq0XK6dWKLng==}
-
-  '@gasboost/client@0.6.0':
-    resolution: {integrity: sha512-uIokBgyO+/pDWS3d1od+eJp3sRYA2QplqQ7+FzBavV3JeceDt3rAZRLY4XJdAuetaKKG+SjeOOVaA7Z/psfMbg==}
+  '@gasboost/client@0.7.0':
+    resolution: {integrity: sha512-Ft2EfKhxbLAbY7ZGZFCN9QqEkFUwILtzmV/YoMm81J9L1q9+SIdHFSg6P+kqziSzAdC1NyaJw8+xxTJYq47lZg==}
 
   '@gasboost/fake-core@0.4.0':
     resolution: {integrity: sha512-7lcKOCEKBEsgXh31MXrNM4ehHuVjpR0UNVkTcahGcPLV3J/eVhcGwW5ZroRCtwKylKvJKW/V1i8pZ/smiHmRzQ==}
@@ -394,8 +386,8 @@ packages:
   '@gasboost/query@1.2.0':
     resolution: {integrity: sha512-WaNAWmUmO0RBZ+nJXvONj5Mzp3O7VqjIcLlNch0O+67qQd5sXSZ0g4epTIp4iyjvDH5ah40BZO7JFCReH9zwPA==}
 
-  '@gasboost/react@0.4.1':
-    resolution: {integrity: sha512-SDI7mNV4aVsjiCloFTJua9PDiazy/a9u868psLep+PaakPXuFaROA6y5hY38KHmH/cdDpJAcJanzwO+UCTLAkw==}
+  '@gasboost/react@0.4.3':
+    resolution: {integrity: sha512-4FtsToHcKLfXD+jNVWjrkMoMxNObm9am9/D2dC2PMlSOb+JexNM4sGFWD5l+9xXCrv5EjzY6D9Qb4F5NYiFdqg==}
     peerDependencies:
       react: ^19
 
@@ -762,6 +754,12 @@ packages:
         optional: true
       '@types/react-dom':
         optional: true
+
+  '@testing-library/user-event@14.6.10':
+    resolution: {integrity: sha512-tA4stGNp3mLGOGO+lh87UA56Tz4c8NVGBSkyIF58O+W/bs2Re9BCI9xihnL70+DsThncFznE0skS88SM1D2hyg==}
+    engines: {node: '>=12', npm: '>=6'}
+    peerDependencies:
+      '@testing-library/dom': '>=7.21.4'
 
   '@ts-morph/common@0.27.0':
     resolution: {integrity: sha512-Wf29UqxWDpc+i61k3oIOzcUfQt79PIT9y/MWfAGlrkjg6lBC1hwDECLXPVJAhWjiGbfBCxZd65F/LIZF3+jeJQ==}
@@ -2388,21 +2386,17 @@ snapshots:
 
   '@gasboost/app@5.5.0': {}
 
-  '@gasboost/auth-app@0.9.0(@gasboost/app@5.5.0)(@gasboost/auth@0.12.0)(@gasboost/client@0.6.0)':
+  '@gasboost/auth-app@0.9.0(@gasboost/app@5.5.0)(@gasboost/auth@0.12.0)(@gasboost/client@0.7.0)':
     dependencies:
       '@gasboost/app': 5.5.0
       '@gasboost/auth': 0.12.0
-      '@gasboost/auth-client': 0.8.0(@gasboost/client@0.6.0)
+      '@gasboost/auth-client': 0.8.1(@gasboost/client@0.7.0)
     transitivePeerDependencies:
       - '@gasboost/client'
 
-  '@gasboost/auth-client@0.2.0(@gasboost/client@0.5.0)':
+  '@gasboost/auth-client@0.8.1(@gasboost/client@0.7.0)':
     optionalDependencies:
-      '@gasboost/client': 0.5.0
-
-  '@gasboost/auth-client@0.8.0(@gasboost/client@0.6.0)':
-    optionalDependencies:
-      '@gasboost/client': 0.6.0
+      '@gasboost/client': 0.7.0
 
   '@gasboost/auth-sheetorm@0.5.1(@gasboost/auth@0.12.0)(@gasboost/sheetorm@4.0.0(zod@4.6.7))':
     dependencies:
@@ -2422,9 +2416,7 @@ snapshots:
     optionalDependencies:
       react: 19.3.1
 
-  '@gasboost/client@0.5.0': {}
-
-  '@gasboost/client@0.6.0': {}
+  '@gasboost/client@0.7.0': {}
 
   '@gasboost/fake-core@0.4.0': {}
 
@@ -2442,10 +2434,10 @@ snapshots:
     transitivePeerDependencies:
       - zod
 
-  '@gasboost/react@0.4.1(react@19.3.1)':
+  '@gasboost/react@0.4.3(react@19.3.1)':
     dependencies:
-      '@gasboost/auth-client': 0.2.0(@gasboost/client@0.5.0)
-      '@gasboost/client': 0.5.0
+      '@gasboost/auth-client': 0.8.1(@gasboost/client@0.7.0)
+      '@gasboost/client': 0.7.0
       react: 19.3.1
 
   '@gasboost/rls@0.3.1(zod@4.6.7)':
@@ -2706,6 +2698,10 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.3.0
       '@types/react-dom': 19.3.0(@types/react@19.3.0)
+
+  '@testing-library/user-event@14.6.10(@testing-library/dom@10.4.2)':
+    dependencies:
+      '@testing-library/dom': 10.4.2
 
   '@ts-morph/common@0.27.0':
     dependencies:

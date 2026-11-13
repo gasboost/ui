@@ -23,6 +23,17 @@ assert.ok(
   items.get("auth-context").dependencies.includes("@gasboost/react@^0.4.1"),
   "auth-context must require the session restoration failure flag",
 );
+assert.ok(
+  items.get("server-job").dependencies.includes("@gasboost/client@^0.7.0"),
+);
+assert.ok(
+  items.get("server-job").dependencies.includes("@gasboost/react@^0.4.3"),
+);
+assert.ok(
+  items
+    .get("appsscript-client")
+    .dependencies.includes("@gasboost/client@^0.7.0"),
+);
 // Resolve this checkout's dependency chain, rather than published main.
 const server = createServer((req, res) => {
   const name = req.url.slice(1).replace(/\.json$/, "");
@@ -134,7 +145,7 @@ try {
   );
   const cli = join(root, "node_modules/shadcn/dist/index.js");
   console.log(
-    "Installing auth pages, auth error pages, and bootstrap into a fresh consumer...",
+    "Installing auth pages, auth error pages, server-job, and bootstrap into a fresh consumer...",
   );
   console.log(
     await run(process.execPath, [
@@ -146,6 +157,7 @@ try {
       `${base}/auth-error-pages.json`,
       `${base}/forgot-password-page.json`,
       `${base}/reset-password-page.json`,
+      `${base}/server-job.json`,
       "--yes",
     ]),
   );
@@ -184,6 +196,11 @@ import { auth } from "./frontend/lib/auth";
 import { UnauthorizedPage } from "./frontend/components/UnauthorizedPage";
 import { ForbiddenPage } from "./frontend/components/ForbiddenPage";
 import { routes } from "./shared/routes";
+import { ServerJobList } from "./frontend/components/ServerJobList";
+import { client, jobs } from "./frontend/lib/appsscript";
+const serverJobs = <ServerJobList />;
+const subscription = jobs.subscribe(() => jobs.getSnapshot());
+const labeledRpc = client.forgotPassword({ email: "user@example.com" }, { label: "再発行" });
 const unauthorized = <UnauthorizedPage />;
 const forbidden = <ForbiddenPage />;
 const customUnauthorized = <UnauthorizedPage signInTo={routes.auth.signIn} title="Sign in" description="Please sign in" actionLabel="Continue" />;
@@ -206,6 +223,16 @@ async function restored() {
   // @ts-expect-error Restored user data must remain typed
   session?.user.data.missing;
 }\n`,
+  );
+  // shadcn may have resolved peers permissively. A frozen install alone skips
+  // resolution and does not catch incompatible peers already in its lockfile.
+  await rm(join(consumer, "pnpm-lock.yaml"));
+  console.log(
+    await run("pnpm", [
+      "install",
+      "--lockfile-only",
+      "--strict-peer-dependencies",
+    ]),
   );
   console.log(
     await run("pnpm", [
@@ -235,6 +262,31 @@ async function restored() {
   );
   console.log("Existing consumer routes preserved when overwrite is declined.");
   await rm(join(consumer, "src/guard.types.tsx"));
+  await rm(join(consumer, "src/frontend"), { recursive: true, force: true });
+  console.log(
+    await run(process.execPath, [
+      cli,
+      "add",
+      `${base}/server-job.json`,
+      "--yes",
+    ]),
+  );
+  for (const name of ["ServerJobList", "ServerJobItem"]) {
+    assert.ok(
+      (
+        await readFile(
+          join(consumer, `src/frontend/components/${name}.tsx`),
+          "utf8",
+        )
+      ).length > 0,
+    );
+  }
+  await assert.rejects(
+    readFile(join(consumer, "src/frontend/components/Guard.tsx")),
+    { code: "ENOENT" },
+  );
+  await run(join(root, "node_modules/.bin/tsc"), ["--project", consumer]);
+  console.log("server-job standalone consumer install and typecheck passed.");
   for (const [name, component, other] of [
     ["forgot-password-page", "ForgotPasswordPage", "ResetPasswordPage"],
     ["reset-password-page", "ResetPasswordPage", "ForgotPasswordPage"],

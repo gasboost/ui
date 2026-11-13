@@ -5,6 +5,6 @@ import type { AppType } from "../../backend/main";
 
 export const authStorage = localStorageAuthStorage();
 
-export const { client } = appsScriptClient<AppType>({
+export const { client, jobs } = appsScriptClient<AppType>({
   metadataProviders: [authMetadataProvider(authStorage)],
 });
