@@ -6,7 +6,7 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
-const consumer = await mkdtemp(join(tmpdir(), "gasboost-guard-"));
+const consumer = await mkdtemp(join(tmpdir(), "gasboost-ui-"));
 const registry = JSON.parse(
   await readFile(join(root, "registry.json"), "utf8"),
 );
@@ -46,6 +46,7 @@ function run(command, args, input) {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
       cwd: consumer,
+      env: { ...process.env, npm_config_strict_peer_dependencies: "true" },
       stdio: ["pipe", "pipe", "pipe"],
     });
     let output = "";
@@ -62,23 +63,20 @@ function run(command, args, input) {
 }
 try {
   const pkg = JSON.parse(await readFile(join(root, "package.json"), "utf8"));
+  const registryPackages = new Set(
+    [...items.values()]
+      .flatMap((item) => item.dependencies ?? [])
+      .map((name) => name.slice(0, name.lastIndexOf("@"))),
+  );
   await writeFile(
     join(consumer, "package.json"),
     JSON.stringify({
-      name: "guard-smoke",
+      name: "ui-smoke",
       private: true,
       dependencies: {
         ...Object.fromEntries(
           Object.entries(pkg.dependencies).filter(
-            ([name]) =>
-              ![
-                "@gasboost/auth-client",
-                "@gasboost/client",
-                "@gasboost/react",
-                "@gasboost/bootstrap",
-                "@tanstack/react-query",
-                "react-router-dom",
-              ].includes(name),
+            ([name]) => !registryPackages.has(name),
           ),
         ),
         vite: "*",
@@ -116,7 +114,7 @@ try {
     join(consumer, "components.json"),
     JSON.stringify({
       $schema: "https://ui.shadcn.com/schema.json",
-      style: "new-york",
+      style: "base-nova",
       rsc: false,
       tsx: true,
       tailwind: {
@@ -135,11 +133,16 @@ try {
     }),
   );
   const cli = join(root, "node_modules/shadcn/dist/index.js");
+  console.log("Installing auth pages and bootstrap into a fresh consumer...");
   console.log(
-    "Installing guard and its registry dependencies into a fresh consumer...",
-  );
-  console.log(
-    await run(process.execPath, [cli, "add", `${base}/guard.json`, "--yes"]),
+    await run(process.execPath, [
+      cli,
+      "add",
+      `${base}/sign-in-page.json`,
+      `${base}/sign-up-page.json`,
+      `${base}/bootstrap.json`,
+      "--yes",
+    ]),
   );
   for (const item of items.values()) {
     for (const file of item.files) {
@@ -173,11 +176,11 @@ export const policy = new AuthorizationPolicy({ staff: ["create", "read"] });\n`
     `import { PermissionGuard } from "./frontend/components/Guard";
 import { useAuth } from "./frontend/contexts/AuthContext";
 import { auth } from "./frontend/lib/auth";
-const allowed = <PermissionGuard requirement={{ staff: ["read"] }}>OK</PermissionGuard>;
+const allowed = <PermissionGuard requirement={{ staff: ["read"] }} />;
 // @ts-expect-error Unknown resource
-const badResource = <PermissionGuard requirement={{ unknown: ["read"] }}>No</PermissionGuard>;
+const badResource = <PermissionGuard requirement={{ unknown: ["read"] }} />;
 // @ts-expect-error Unknown action
-const badAction = <PermissionGuard requirement={{ staff: ["delete"] }}>No</PermissionGuard>;
+const badAction = <PermissionGuard requirement={{ staff: ["delete"] }} />;
 function check() {
   const { user, isSessionRestoreFailed } = useAuth();
   const restoreFailed: boolean = isSessionRestoreFailed;
@@ -191,6 +194,13 @@ async function restored() {
   // @ts-expect-error Restored user data must remain typed
   session?.user.data.missing;
 }\n`,
+  );
+  console.log(
+    await run("pnpm", [
+      "install",
+      "--strict-peer-dependencies",
+      "--frozen-lockfile",
+    ]),
   );
   // Use the checked-in compiler; dependencies are resolved from the consumer.
   await run(join(root, "node_modules/.bin/tsc"), ["--project", consumer]);

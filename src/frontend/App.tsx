@@ -1,8 +1,10 @@
 import { Outlet, Route, Routes } from "react-router-dom";
 import { routes } from "../shared/routes";
-import { BootstrapGuard } from "./components/Guard";
+import { AuthGuard, BootstrapGuard } from "./components/Guard";
 import { AuthProvider } from "./contexts/AuthContext";
-import { BootstrapPage } from "./features/bootstrap/BootstrapPage";
+import { SignInPage } from "./components/SignInPage";
+import { SignUpPage } from "./components/SignUpPage";
+import { BootstrapPage } from "./components/BootstrapPage";
 
 export default function App() {
   return (
@@ -16,7 +18,14 @@ export default function App() {
               <Outlet />
             </AuthProvider>
           }
-        ></Route>
+        >
+          <Route path={routes.auth.signUp} element={<SignUpPage />} />
+          <Route path={routes.auth.signIn} element={<SignInPage />} />
+
+          <Route element={<AuthGuard />}>
+            <Route path={routes.home} element={<></>} />
+          </Route>
+        </Route>
       </Route>
     </Routes>
   );

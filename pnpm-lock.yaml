@@ -18,20 +18,20 @@ importers:
         specifier: ^5.5.0
         version: 5.5.0
       '@gasboost/auth':
-        specifier: ^0.10.0
-        version: 0.10.0
+        specifier: ^0.12.0
+        version: 0.12.0
       '@gasboost/auth-app':
-        specifier: ^0.7.0
-        version: 0.7.0(@gasboost/app@5.5.0)(@gasboost/auth@0.10.0)(@gasboost/client@0.6.0)
+        specifier: ^0.9.0
+        version: 0.9.0(@gasboost/app@5.5.0)(@gasboost/auth@0.12.0)(@gasboost/client@0.6.0)
       '@gasboost/auth-client':
-        specifier: ^0.6.0
-        version: 0.6.0(@gasboost/client@0.6.0)
+        specifier: ^0.8.0
+        version: 0.8.0(@gasboost/client@0.6.0)
       '@gasboost/auth-sheetorm':
-        specifier: ^0.4.2
-        version: 0.4.2(@gasboost/auth@0.10.0)(@gasboost/sheetorm@4.0.0(zod@4.6.7))
+        specifier: ^0.5.1
+        version: 0.5.1(@gasboost/auth@0.12.0)(@gasboost/sheetorm@4.0.0(zod@4.6.7))
       '@gasboost/bootstrap':
-        specifier: ^0.4.0
-        version: 0.4.0(@gasboost/auth@0.10.0)(react@19.3.1)
+        specifier: ^0.5.0
+        version: 0.5.0(@gasboost/auth@0.12.0)(react@19.3.1)
       '@gasboost/client':
         specifier: ^0.6.0
         version: 0.6.0
@@ -47,6 +47,9 @@ importers:
       '@gasboost/table':
         specifier: ^0.2.0
         version: 0.2.0(zod@4.6.7)
+      '@hookform/resolvers':
+        specifier: ^7.0.5
+        version: 7.0.5(ajv-formats@2.1.1(ajv@8.20.0))(ajv@8.20.0)(react-hook-form@7.91.0(@types/react@19.3.0)(react@19.3.1))(zod@4.6.7)
       '@tanstack/react-query':
         specifier: ^5.107.1
         version: 5.107.1(@types/react@19.3.0)(react@19.3.1)
@@ -65,6 +68,9 @@ importers:
       react-dom:
         specifier: ^19.3.1
         version: 19.3.1(react@19.3.1)
+      react-hook-form:
+        specifier: ^7.91.0
+        version: 7.91.0(@types/react@19.3.0)(react@19.3.1)
       react-router-dom:
         specifier: ^7.18.5
         version: 7.18.5(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -250,6 +256,10 @@ packages:
     resolution: {integrity: sha512-v+oN26xP4YIlQsbQ/CbTH1WG5m/l/DjKKZNy/Kp3f/AFvbgt7Em/D0FeMM3O2hX0YzeN2M16W8lOpyhIkfCBcQ==}
     engines: {node: '>=6.9.0'}
 
+  '@babel/runtime@7.29.14':
+    resolution: {integrity: sha512-Y5tqevQaUAZhhj82BpYMNC1ssvLQTVAfwKdm8iy8qwmhvC2/CpcAu8OC+QEtjM7pMk7knx83u1Qj8gzkicyelw==}
+    engines: {node: '>=6.9.0'}
+
   '@babel/template@7.29.7':
     resolution: {integrity: sha512-puq+Gf35oI24FeN11LkoUQFqv9uwNeWpxXZi/Ji3rRIoKAzKnxRaZ+Gkj0vKS9ZCiTESfng1N9LyOyXvo+m+Gg==}
     engines: {node: '>=6.9.0'}
@@ -329,11 +339,11 @@ packages:
   '@gasboost/app@5.5.0':
     resolution: {integrity: sha512-71+KZQn4PoIVgwiJ25WU/sVy8Tq/HcRc26nXggzqNZ1KRQd+nVRUWmMZB3Db2RQt2XQXCCw2rOaJEr9hBTXDug==}
 
-  '@gasboost/auth-app@0.7.0':
-    resolution: {integrity: sha512-bGzQjg9TdyxOLrFoXtUpHWR8QkmXB3UkwStanmKYyEsggaiSzXeOxUjaJVTYjSN2+6BJsAIlpIiMG9Mw5qthKA==}
+  '@gasboost/auth-app@0.9.0':
+    resolution: {integrity: sha512-f0WtsyiQWC9rkI8cniVb7rtA79d1xZUFJQqmmmVVpdDRXrmDvql9csxIbw2KIr4l8tEAOgD84ly450EkfeNtsA==}
     peerDependencies:
-      '@gasboost/app': ^5.2.0
-      '@gasboost/auth': ^0.10.0
+      '@gasboost/app': ^5.5.0
+      '@gasboost/auth': ^0.12.0
 
   '@gasboost/auth-client@0.2.0':
     resolution: {integrity: sha512-0NVkO/j1i6rHRgETRZl1+IFjTrZAQOurB+7UUrLaXiaAo+c/O+RtXmy4TCYleDbgw0u9sl9U95gfR7Xi1DpJvg==}
@@ -343,27 +353,27 @@ packages:
       '@gasboost/client':
         optional: true
 
-  '@gasboost/auth-client@0.6.0':
-    resolution: {integrity: sha512-8/G44O0mc/e6w3kuMVYy2SVyQnxv+/j9bU6FrdyNqRL9mxItr23c7fx544lYsMFNVrTvLoQY17rQcKqUnOBvdw==}
+  '@gasboost/auth-client@0.8.0':
+    resolution: {integrity: sha512-TGy17s1uI5xFFG9k6cfJo9WKbPFP5o6S3WJEAL+mlhRFx6zU72GSvo3fxjQLDL05aO9yz2f7j8ISVxu6RdMDCg==}
     peerDependencies:
-      '@gasboost/client': ^0.5.0
+      '@gasboost/client': ^0.5.0 || ^0.6.0
     peerDependenciesMeta:
       '@gasboost/client':
         optional: true
 
-  '@gasboost/auth-sheetorm@0.4.2':
-    resolution: {integrity: sha512-JNUJLPonwx4pcmkrGFqcer/MO0E9PM2Tjb8d5PYwKIyoKQAs+iK2UX9efe897WB0zqO6aFoZDI3cNTINo6Lu2Q==}
+  '@gasboost/auth-sheetorm@0.5.1':
+    resolution: {integrity: sha512-hrzK6bPGkesX5dNNM+nrKpGxSjR+4lmx63CiT4B2xtvAj4D7fVin5ZVGB+2E55FMTzzoHiUUJR+pID9j2lk+9Q==}
     peerDependencies:
-      '@gasboost/auth': ^0.5.0 || ^0.6.0 || ^0.7.0 || ^0.8.0 || ^0.9.0 || ^0.10.0
+      '@gasboost/auth': ^0.5.0 || ^0.6.0 || ^0.7.0 || ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0
       '@gasboost/sheetorm': ^3.1.0 || ^4.0.0
 
-  '@gasboost/auth@0.10.0':
-    resolution: {integrity: sha512-8vsCieZARbWwDDhYlx3lzNagHffsqdbAq5rMIcWXcwgNrKagqfljNzzafmkVrIV1vpBccCz3TUaTdaEmQf7iRA==}
+  '@gasboost/auth@0.12.0':
+    resolution: {integrity: sha512-dKzL+LQJbpwkS5vBKT8LbtajwUBWf5x/p34mrhuB7IB3cHhuaBI890LjLz+I8bAGH8p7LQDz74biwqd04yODrw==}
 
-  '@gasboost/bootstrap@0.4.0':
-    resolution: {integrity: sha512-TeJFtOHCO+ye74rybSskxznqrDWbprtuxe553CTvwTmqUTK8t9qohUHSTeuWcShWjEEU/CzwHG+Byp7X3AS7sA==}
+  '@gasboost/bootstrap@0.5.0':
+    resolution: {integrity: sha512-weTGXSw89Vxr62BUeSEZNscJSvbzoq4GHOHq5IqahEFVJ+iahMkBPLBxeY7mrXH/g+3XGqbsqi+nk5tQwJeveQ==}
     peerDependencies:
-      '@gasboost/auth': ^0.9.0
+      '@gasboost/auth': ^0.12.0
       react: ^19
     peerDependenciesMeta:
       react:
@@ -411,6 +421,81 @@ packages:
 
   '@gasboost/vite@1.6.1':
     resolution: {integrity: sha512-8JZZt/wCmVvTwbK30w00CUhyXRcWjSMzJ4AZZPAr0Xf/LeKyaiy9N4opiTK3jq+A8bkiO8LM1G9oDbj23diEcA==}
+
+  '@hookform/resolvers@7.0.5':
+    resolution: {integrity: sha512-E7ca3tpIJxHPGhFOfXLlCCZh7up6EcnUTbgTt0SRUENXagq8DJnob9rK+VqsNCsfUuO6mMU5NYNm6BaL18flgQ==}
+    peerDependencies:
+      '@standard-schema/spec': ^1.0.0
+      '@vinejs/vine': ^2.0.0 || ^3.0.0 || ^4.0.0
+      ajv: ^8.12.0
+      ajv-errors: ^3.0.0
+      ajv-formats: ^2.1.1 || ^3.0.0
+      arktype: ^2.0.0
+      ata-validator: ^1.23.0
+      class-transformer: '>=0.4.0'
+      class-validator: '>=0.12.0'
+      computed-types: ^1.0.0
+      effect: ^4.0.0
+      fluentvalidation-ts: ^3.0.0
+      fp-ts: ^2.7.0
+      io-ts: ^2.0.0
+      joi: ^17.0.0 || ^18.0.0
+      nope-validator: '>=0.12.0'
+      react-hook-form: ^7.55.0
+      superstruct: '>=0.12.0'
+      typanion: ^3.3.2
+      typebox: ^1.0.0
+      valibot: '>=0.31.0 || ^1.0.0-beta.4 || ^1.0.0-rc'
+      vest: '>=6.0.0'
+      yup: ^1.0.0
+      zod: ^3.25.0 || ^4.0.0
+    peerDependenciesMeta:
+      '@standard-schema/spec':
+        optional: true
+      '@vinejs/vine':
+        optional: true
+      ajv:
+        optional: true
+      ajv-errors:
+        optional: true
+      ajv-formats:
+        optional: true
+      arktype:
+        optional: true
+      ata-validator:
+        optional: true
+      class-transformer:
+        optional: true
+      class-validator:
+        optional: true
+      computed-types:
+        optional: true
+      effect:
+        optional: true
+      fluentvalidation-ts:
+        optional: true
+      fp-ts:
+        optional: true
+      io-ts:
+        optional: true
+      joi:
+        optional: true
+      nope-validator:
+        optional: true
+      superstruct:
+        optional: true
+      typanion:
+        optional: true
+      typebox:
+        optional: true
+      valibot:
+        optional: true
+      vest:
+        optional: true
+      yup:
+        optional: true
+      zod:
+        optional: true
 
   '@jridgewell/gen-mapping@0.3.13':
     resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
@@ -554,6 +639,9 @@ packages:
   '@sindresorhus/merge-streams@4.0.0':
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
     engines: {node: '>=18'}
+
+  '@standard-schema/utils@0.3.0':
+    resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
 
   '@tailwindcss/node@4.3.5':
     resolution: {integrity: sha512-yT53FzV4ke0cr/BguDxhWMpm5MJu1O2muzk+tKw6lKHjODAsYArBbWwFbJiaksfzFv1tpkO9QHGzmfs1hJT66g==}
@@ -1634,6 +1722,16 @@ packages:
     peerDependencies:
       react: ^19.3.1
 
+  react-hook-form@7.91.0:
+    resolution: {integrity: sha512-5BEBUnCBwa28AFXYTYmOaB/+CSpJ/+CWVASHEvIGUzFdHyUiPHeRhG7r5hOZ8nZi0yP7pbHdFNXO/p31EKTJFQ==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8.0 || ^17 || ^18 || ^19
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
   react-is@17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
 
@@ -2195,6 +2293,8 @@ snapshots:
 
   '@babel/runtime@7.29.13': {}
 
+  '@babel/runtime@7.29.14': {}
+
   '@babel/template@7.29.7':
     dependencies:
       '@babel/code-frame': 7.29.7
@@ -2288,11 +2388,11 @@ snapshots:
 
   '@gasboost/app@5.5.0': {}
 
-  '@gasboost/auth-app@0.7.0(@gasboost/app@5.5.0)(@gasboost/auth@0.10.0)(@gasboost/client@0.6.0)':
+  '@gasboost/auth-app@0.9.0(@gasboost/app@5.5.0)(@gasboost/auth@0.12.0)(@gasboost/client@0.6.0)':
     dependencies:
       '@gasboost/app': 5.5.0
-      '@gasboost/auth': 0.10.0
-      '@gasboost/auth-client': 0.6.0(@gasboost/client@0.6.0)
+      '@gasboost/auth': 0.12.0
+      '@gasboost/auth-client': 0.8.0(@gasboost/client@0.6.0)
     transitivePeerDependencies:
       - '@gasboost/client'
 
@@ -2300,25 +2400,25 @@ snapshots:
     optionalDependencies:
       '@gasboost/client': 0.5.0
 
-  '@gasboost/auth-client@0.6.0(@gasboost/client@0.6.0)':
+  '@gasboost/auth-client@0.8.0(@gasboost/client@0.6.0)':
     optionalDependencies:
       '@gasboost/client': 0.6.0
 
-  '@gasboost/auth-sheetorm@0.4.2(@gasboost/auth@0.10.0)(@gasboost/sheetorm@4.0.0(zod@4.6.7))':
+  '@gasboost/auth-sheetorm@0.5.1(@gasboost/auth@0.12.0)(@gasboost/sheetorm@4.0.0(zod@4.6.7))':
     dependencies:
-      '@gasboost/auth': 0.10.0
+      '@gasboost/auth': 0.12.0
       '@gasboost/sheetorm': 4.0.0(zod@4.6.7)
       zod: 4.6.7
 
-  '@gasboost/auth@0.10.0':
+  '@gasboost/auth@0.12.0':
     dependencies:
       '@gasboost/table': 0.1.0(zod@4.6.7)
       zod: 4.6.7
 
-  '@gasboost/bootstrap@0.4.0(@gasboost/auth@0.10.0)(react@19.3.1)':
+  '@gasboost/bootstrap@0.5.0(@gasboost/auth@0.12.0)(react@19.3.1)':
     dependencies:
       '@gasboost/app': 5.5.0
-      '@gasboost/auth': 0.10.0
+      '@gasboost/auth': 0.12.0
     optionalDependencies:
       react: 19.3.1
 
@@ -2376,6 +2476,15 @@ snapshots:
       typescript: 7.0.2
     transitivePeerDependencies:
       - date-fns
+
+  '@hookform/resolvers@7.0.5(ajv-formats@2.1.1(ajv@8.20.0))(ajv@8.20.0)(react-hook-form@7.91.0(@types/react@19.3.0)(react@19.3.1))(zod@4.6.7)':
+    dependencies:
+      '@standard-schema/utils': 0.3.0
+      react-hook-form: 7.91.0(@types/react@19.3.0)(react@19.3.1)
+    optionalDependencies:
+      ajv: 8.20.0
+      ajv-formats: 2.1.1(ajv@8.20.0)
+      zod: 4.6.7
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:
@@ -2498,6 +2607,8 @@ snapshots:
 
   '@sindresorhus/merge-streams@4.0.0': {}
 
+  '@standard-schema/utils@0.3.0': {}
+
   '@tailwindcss/node@4.3.5':
     dependencies:
       '@jridgewell/remapping': 2.3.5
@@ -2578,7 +2689,7 @@ snapshots:
   '@testing-library/dom@10.4.2':
     dependencies:
       '@babel/code-frame': 7.29.7
-      '@babel/runtime': 7.29.13
+      '@babel/runtime': 7.29.14
       '@types/aria-query': 5.0.4
       aria-query: 5.3.0
       dom-accessibility-api: 0.5.16
@@ -3342,6 +3453,12 @@ snapshots:
     dependencies:
       react: 19.3.1
       scheduler: 0.28.0
+
+  react-hook-form@7.91.0(@types/react@19.3.0)(react@19.3.1):
+    dependencies:
+      react: 19.3.1
+    optionalDependencies:
+      '@types/react': 19.3.0
 
   react-is@17.0.2: {}
 

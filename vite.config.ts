@@ -147,7 +147,7 @@ export default defineConfig(({ command, mode }) => {
       },
     },
     template: {
-      __BOOTSTRAP__: JSON.stringify({ initialized: false }),
+      __BOOTSTRAP__: JSON.stringify({ initialized: true }),
     },
   });
 

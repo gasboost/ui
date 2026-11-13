@@ -62,9 +62,7 @@ afterEach(cleanup);
 
 const guards = {
   AuthGuard: <AuthGuard />,
-  PermissionGuard: (
-    <PermissionGuard requirement={{ staff: ["read"] }} children={null} />
-  ),
+  PermissionGuard: <PermissionGuard requirement={{ staff: ["read"] }} />,
 };
 
 for (const [name, guard] of Object.entries(guards)) {

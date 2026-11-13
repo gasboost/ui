@@ -15,7 +15,7 @@ import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { BootstrapGuard } from "../src/frontend/components/Guard";
 import { AuthProvider } from "../src/frontend/contexts/AuthContext";
 import { client } from "../src/frontend/lib/appsscript";
-import { BootstrapPage } from "../src/frontend/features/bootstrap/BootstrapPage";
+import { BootstrapPage } from "../src/frontend/components/BootstrapPage";
 import { routes } from "../src/shared/routes";
 import { rpc, storage, testAuth, user } from "./fixtures/auth";
 
