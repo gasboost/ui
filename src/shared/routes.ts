@@ -7,5 +7,6 @@ export const routes = {
   system: {
     forbidden: "/forbidden",
     bootstrap: "/bootstrap",
+    unauthorized: "/unauthorized",
   },
 } as const;

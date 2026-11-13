@@ -127,6 +127,50 @@ PageはRouterと `QueryClientProvider` の内側に配置し、認証状態を�
 
 既存のroutesを保持する場合は `routes.home`、`routes.auth.signIn`、`routes.auth.signUp`、`routes.system.bootstrap`、`routes.system.forbidden` を追加してください。認証成功後は `routes.home` へ遷移します。認証エラーコードを返すため、バックエンドでは `handlers(auth)` の前に `authErrorHandler()` を登録してください。Guardが参照する共有policyとバックエンドは利用側で用意します。
 
+## 認証・認可エラーページ
+
+```sh
+pnpm dlx shadcn@latest add gasboost/ui/auth-error-pages
+```
+
+`components/UnauthorizedPage.tsx` と `components/ForbiddenPage.tsx`、Card / Button、および依存する Guard と共有routesを導入します。既存ファイルの上書き確認には、上記「既存の routes がある場合」と同様に対応してください。共有policyとバックエンドは利用側で用意します。
+
+`UnauthorizedPage` はログインが必要な状態を説明し、初期値では `routes.auth.signIn` へのリンクを表示します。`ForbiddenPage` は権限不足を説明し、初期値では `routes.home` へ戻れます。各PageはRouterの内側で使います。Page自体は認証・認可の判定、セッション復元、RPC呼び出しを行いません。
+
+```tsx
+import { UnauthorizedPage } from "./frontend/components/UnauthorizedPage";
+import { ForbiddenPage } from "./frontend/components/ForbiddenPage";
+
+// AuthProvider と Router の内側。HomePage / AccountPage は利用側で定義します。
+<Routes>
+  <Route path={routes.auth.signIn} element={<SignInPage />} />
+  <Route path={routes.system.forbidden} element={<ForbiddenPage />} />
+  <Route path="/unauthorized" element={<UnauthorizedPage />} />
+  <Route path={routes.home} element={<HomePage />} />
+  <Route element={<AuthGuard />}>
+    <Route path="/account" element={<AccountPage />} />
+  </Route>
+  <Route element={<PermissionGuard requirement={{ staff: ["read"] }} />}>
+    <Route path="/staff" element={<StaffPage />} />
+  </Route>
+</Routes>;
+```
+
+既存Guardは未認証時に `routes.auth.signIn`、権限不足時に `routes.system.forbidden` へ遷移します。`/unauthorized` は利用側の任意の例で、共有routesへの追加やGuardからの自動遷移はありません。ログイン前に案内を挟む場合は、`routes.auth.signIn` のRouteに `<UnauthorizedPage signInTo="/login-form" />` を配置し、別の `/login-form` Routeに `SignInPage` を配置してください。この場合は案内自身をリンク先に指定しないようにします。案内とforbiddenのRouteはGuardの外側に置き、戻り先には利用者がアクセスできるページを指定してください。
+
+`UnauthorizedPage` の `signInTo`、`ForbiddenPage` の `returnTo` でリンク先を明示できます（React Routerの `To` 型）。両Pageの `title` / `description` / `actionLabel` で文言を変更できます。配布されたTSXを直接編集して配置や見た目も変更できます。
+
+```tsx
+<ForbiddenPage
+  returnTo={routes.home}
+  title="この画面は利用できません"
+  description="必要な権限については管理者にお問い合わせください。"
+  actionLabel="トップへ戻る"
+/>
+```
+
+401 / 403相当の状態を案内するUIであり、GAS RPCがHTTP 401 / 403を返す前提はありません。表示先は利用側のRouter設定で決まります。バックエンドの実行時認可も引き続き必要です。
+
 ## 開発・検証
 
 ```sh
@@ -137,7 +181,7 @@ pnpm test
 pnpm registry:smoke
 ```
 
-`registry:smoke` はregistryをbuildし、一時的なconsumerへ認証PageとBootstrapを実際のshadcn CLIで依存を含めてインストールし、strict peer条件と配布ソースの型チェックを確認します。`@gasboost/react@^0.4.1` の依存宣言と復元失敗フラグの型、共有policyからの型推論、不正なresource/actionの型エラー、上書きを断った既存routesの保持を確認します。npmへのアクセスが必要です。生成物は `dist/registry` に出力し、Gitの管理対象に含めません。GAS実環境へのデプロイは行いません。
+`registry:smoke` はregistryをbuildし、一時的なconsumerへ認証Page・認証エラーページとBootstrapを実際のshadcn CLIで依存を含めてインストールし、strict peer条件と配布ソースの型チェックを確認します。`@gasboost/react@^0.4.1` の依存宣言と復元失敗フラグの型、共有policyからの型推論、不正なresource/actionの型エラー、上書きを断った既存routesの保持を確認します。npmへのアクセスが必要です。生成物は `dist/registry` に出力し、Gitの管理対象に含めません。GAS実環境へのデプロイは行いません。
 
 TypeScriptの `skipLibCheck` はGASとDOMの `MimeType` 宣言の競合を避けるために指定しています。配布ソースとconsumerの型チェックは有効です。
 
