@@ -17,8 +17,6 @@ export function BootstrapGuard() {
   return <Outlet />;
 }
 
-type GuardProps = { children: ReactNode };
-
 export function AuthGuard() {
   const { user, isLoading, isSessionRestoreFailed } = useAuth();
 
@@ -28,7 +26,7 @@ export function AuthGuard() {
   return <Outlet />;
 }
 
-type PermissionGuardProps = GuardProps & {
+type PermissionGuardProps = {
   requirement: Parameters<typeof policy.can>[1];
 };
 
@@ -43,4 +41,20 @@ export function PermissionGuard({ requirement }: PermissionGuardProps) {
   }
 
   return <Outlet />;
+}
+
+export function Can({
+  requirement,
+  children,
+}: { children: ReactNode } & PermissionGuardProps) {
+  const { user, isLoading, isSessionRestoreFailed } = useAuth();
+
+  if (isLoading || isSessionRestoreFailed) return null;
+  if (!user) return <Navigate to={routes.auth.signIn} replace />;
+
+  if (!policy.can(user.data.permissions, requirement)) {
+    return <Navigate to={routes.system.forbidden} replace />;
+  }
+
+  return <>{children}</>;
 }

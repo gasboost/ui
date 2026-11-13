@@ -50,7 +50,6 @@
         }
       ]
     },
-
     {
       "name": "guard",
       "type": "registry:item",
@@ -100,14 +99,9 @@
           "target": "~/src/frontend/lib/bootstrap.ts"
         },
         {
-          "path": "src/frontend/features/bootstrap/BootstrapPage.tsx",
+          "path": "src/frontend/components/BootstrapPage.tsx",
           "type": "registry:file",
-          "target": "~/src/frontend/features/bootstrap/BootstrapPage.tsx"
-        },
-        {
-          "path": "src/frontend/features/bootstrap/mutations.ts",
-          "type": "registry:file",
-          "target": "~/src/frontend/features/bootstrap/mutations.ts"
+          "target": "~/src/frontend/components/BootstrapPage.tsx"
         }
       ]
     }

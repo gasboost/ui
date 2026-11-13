@@ -1,7 +1,8 @@
 import { AppsScript, type InferAppsScript } from "@gasboost/app";
-import { handlers } from "@gasboost/auth-app";
+import { authErrorHandler, handlers } from "@gasboost/auth-app";
 import { auth } from "./lib/auth";
 import { bootstrap } from "./lib/bootstrap";
+import logErrors from "./presentation/logErrors";
 import { templateValue } from "./presentation/templateValue";
 
 const app = new AppsScript()
@@ -12,8 +13,11 @@ const app = new AppsScript()
     return template.evaluate().setTitle("");
   })
 
+  .use(logErrors)
+
   .calls(bootstrap.handlers())
 
+  .use(authErrorHandler())
   .calls(handlers(auth));
 
 export type AppType = InferAppsScript<typeof app>;
