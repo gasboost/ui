@@ -3,6 +3,8 @@ export const routes = {
   auth: {
     signIn: "/sign-in",
     signUp: "/sign-up",
+    forgotPassword: "/forgot-password",
+    resetPassword: "/reset-password",
   },
   system: {
     forbidden: "/forbidden",

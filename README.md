@@ -127,6 +127,33 @@ PageはRouterと `QueryClientProvider` の内側に配置し、認証状態を�
 
 既存のroutesを保持する場合は `routes.home`、`routes.auth.signIn`、`routes.auth.signUp`、`routes.system.bootstrap`、`routes.system.forbidden` を追加してください。認証成功後は `routes.home` へ遷移します。認証エラーコードを返すため、バックエンドでは `handlers(auth)` の前に `authErrorHandler()` を登録してください。Guardが参照する共有policyとバックエンドは利用側で用意します。
 
+## パスワードの再発行・再設定ページ
+
+それぞれ個別にインストールできます。互いのPageやGuard、AuthContextには依存しません。
+
+```sh
+pnpm dlx shadcn@latest add gasboost/ui/forgot-password-page
+pnpm dlx shadcn@latest add gasboost/ui/reset-password-page
+```
+
+`components/ForgotPasswordPage.tsx` / `components/ResetPasswordPage.tsx` と共有routes、必要なフォーム・UI依存を導入します。Routerと `QueryClientProvider` の内側、ログインを要求するGuardの外側に配置してください。
+
+```tsx
+import { ForgotPasswordPage } from "./frontend/components/ForgotPasswordPage";
+import { ResetPasswordPage } from "./frontend/components/ResetPasswordPage";
+
+<Route path={routes.auth.forgotPassword} element={<ForgotPasswordPage />} />
+<Route path={routes.auth.resetPassword} element={<ResetPasswordPage />} />
+```
+
+既存ファイルの上書きを断った場合は `routes.auth.forgotPassword`（初期値 `/forgot-password`）、`routes.auth.resetPassword`（`/reset-password`）、`routes.auth.signIn` を既存routesに追加してください。ログイン画面から再発行ページへのリンクも利用側で配置できます。
+
+Forgotは `client.forgotPassword({ email })` を呼び、登録有無によらず同じ完了案内を表示します。Resetは `useSearchParams()` の `token` と新しいパスワードを `client.resetPassword({ token, newPassword })` に渡します。確認欄はRPCに送信しません。トークン欠損時は送信できず、不正・期限切れ・使用済みの場合は再発行リンクを案内します。通信などの失敗は手動で再試行できます。成功後はログインへのリンクを表示し、自動ログインは行いません。
+
+バックエンドは既存の `handlers(auth)` と、その前に登録した `authErrorHandler()` を使用します。パスワードリセットの有効化（`emailPassword.passwordReset`）、通知メールの実装とリンクの生成は利用側の責務です。追加のバックエンドAPIやパッケージのバージョン更新は不要です。
+
+GASでは既存の `AppsScriptRouter` の内側に `HashRouter` を配置してください。メールのURL例は `https://script.google.com/macros/s/DEPLOYMENT_ID/exec?token=URL_ENCODED_TOKEN#/reset-password` です。`AppsScriptRouter` がGAS親ページのqueryをHashRouterに同期するため、Pageはiframeの `window.location.search` を直接読みません。HashRouterのqueryを使う `.../exec#/reset-password?token=URL_ENCODED_TOKEN` にも対応します。トークンは `encodeURIComponent()` でエンコードし、実際のデプロイURLと設定したresetルートを使ってください。
+
 ## 認証・認可エラーページ
 
 ```sh
@@ -181,7 +208,7 @@ pnpm test
 pnpm registry:smoke
 ```
 
-`registry:smoke` はregistryをbuildし、一時的なconsumerへ認証Page・認証エラーページとBootstrapを実際のshadcn CLIで依存を含めてインストールし、strict peer条件と配布ソースの型チェックを確認します。`@gasboost/react@^0.4.1` の依存宣言と復元失敗フラグの型、共有policyからの型推論、不正なresource/actionの型エラー、上書きを断った既存routesの保持を確認します。npmへのアクセスが必要です。生成物は `dist/registry` に出力し、Gitの管理対象に含めません。GAS実環境へのデプロイは行いません。
+`registry:smoke` はregistryをbuildし、一時的なconsumerへ認証Page・パスワード再設定Page・認証エラーページとBootstrapを実際のshadcn CLIで依存を含めてインストールし、strict peer条件と配布ソースの型チェックを確認します。`@gasboost/react@^0.4.1` の依存宣言と復元失敗フラグの型、共有policyからの型推論、不正なresource/actionの型エラー、上書きを断った既存routesの保持を確認します。パスワード再発行・再設定Pageはそれぞれ単独でもインストール・型チェックします。npmへのアクセスが必要です。生成物は `dist/registry` に出力し、Gitの管理対象に含めません。GAS実環境へのデプロイは行いません。
 
 TypeScriptの `skipLibCheck` はGASとDOMの `MimeType` 宣言の競合を避けるために指定しています。配布ソースとconsumerの型チェックは有効です。
 
