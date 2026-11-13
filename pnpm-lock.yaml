@@ -18,20 +18,20 @@ importers:
         specifier: ^5.5.0
         version: 5.5.0
       '@gasboost/auth':
-        specifier: ^0.11.0
-        version: 0.11.0
+        specifier: ^0.12.0
+        version: 0.12.0
       '@gasboost/auth-app':
         specifier: ^0.9.0
-        version: 0.9.0(@gasboost/app@5.5.0)(@gasboost/auth@0.11.0)(@gasboost/client@0.6.0)
+        version: 0.9.0(@gasboost/app@5.5.0)(@gasboost/auth@0.12.0)(@gasboost/client@0.6.0)
       '@gasboost/auth-client':
-        specifier: ^0.6.0
-        version: 0.6.0(@gasboost/client@0.6.0)
+        specifier: ^0.8.0
+        version: 0.8.0(@gasboost/client@0.6.0)
       '@gasboost/auth-sheetorm':
-        specifier: ^0.4.2
-        version: 0.4.2(@gasboost/auth@0.11.0)(@gasboost/sheetorm@4.0.0(zod@4.6.7))
+        specifier: ^0.5.1
+        version: 0.5.1(@gasboost/auth@0.12.0)(@gasboost/sheetorm@4.0.0(zod@4.6.7))
       '@gasboost/bootstrap':
         specifier: ^0.5.0
-        version: 0.5.0(@gasboost/auth@0.11.0)(react@19.3.1)
+        version: 0.5.0(@gasboost/auth@0.12.0)(react@19.3.1)
       '@gasboost/client':
         specifier: ^0.6.0
         version: 0.6.0
@@ -353,14 +353,6 @@ packages:
       '@gasboost/client':
         optional: true
 
-  '@gasboost/auth-client@0.6.0':
-    resolution: {integrity: sha512-8/G44O0mc/e6w3kuMVYy2SVyQnxv+/j9bU6FrdyNqRL9mxItr23c7fx544lYsMFNVrTvLoQY17rQcKqUnOBvdw==}
-    peerDependencies:
-      '@gasboost/client': ^0.5.0
-    peerDependenciesMeta:
-      '@gasboost/client':
-        optional: true
-
   '@gasboost/auth-client@0.8.0':
     resolution: {integrity: sha512-TGy17s1uI5xFFG9k6cfJo9WKbPFP5o6S3WJEAL+mlhRFx6zU72GSvo3fxjQLDL05aO9yz2f7j8ISVxu6RdMDCg==}
     peerDependencies:
@@ -369,14 +361,14 @@ packages:
       '@gasboost/client':
         optional: true
 
-  '@gasboost/auth-sheetorm@0.4.2':
-    resolution: {integrity: sha512-JNUJLPonwx4pcmkrGFqcer/MO0E9PM2Tjb8d5PYwKIyoKQAs+iK2UX9efe897WB0zqO6aFoZDI3cNTINo6Lu2Q==}
+  '@gasboost/auth-sheetorm@0.5.1':
+    resolution: {integrity: sha512-hrzK6bPGkesX5dNNM+nrKpGxSjR+4lmx63CiT4B2xtvAj4D7fVin5ZVGB+2E55FMTzzoHiUUJR+pID9j2lk+9Q==}
     peerDependencies:
-      '@gasboost/auth': ^0.5.0 || ^0.6.0 || ^0.7.0 || ^0.8.0 || ^0.9.0 || ^0.10.0
+      '@gasboost/auth': ^0.5.0 || ^0.6.0 || ^0.7.0 || ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0
       '@gasboost/sheetorm': ^3.1.0 || ^4.0.0
 
-  '@gasboost/auth@0.11.0':
-    resolution: {integrity: sha512-x7i1dJ1we0WnMULv2qt6nTBPqVNOsfGtnK0+/Pv6pyQqpCWjShpaNE08TWu5+zoUKp9R5lgjSKdRy+ugyOkQAQ==}
+  '@gasboost/auth@0.12.0':
+    resolution: {integrity: sha512-dKzL+LQJbpwkS5vBKT8LbtajwUBWf5x/p34mrhuB7IB3cHhuaBI890LjLz+I8bAGH8p7LQDz74biwqd04yODrw==}
 
   '@gasboost/bootstrap@0.5.0':
     resolution: {integrity: sha512-weTGXSw89Vxr62BUeSEZNscJSvbzoq4GHOHq5IqahEFVJ+iahMkBPLBxeY7mrXH/g+3XGqbsqi+nk5tQwJeveQ==}
@@ -2396,10 +2388,10 @@ snapshots:
 
   '@gasboost/app@5.5.0': {}
 
-  '@gasboost/auth-app@0.9.0(@gasboost/app@5.5.0)(@gasboost/auth@0.11.0)(@gasboost/client@0.6.0)':
+  '@gasboost/auth-app@0.9.0(@gasboost/app@5.5.0)(@gasboost/auth@0.12.0)(@gasboost/client@0.6.0)':
     dependencies:
       '@gasboost/app': 5.5.0
-      '@gasboost/auth': 0.11.0
+      '@gasboost/auth': 0.12.0
       '@gasboost/auth-client': 0.8.0(@gasboost/client@0.6.0)
     transitivePeerDependencies:
       - '@gasboost/client'
@@ -2408,29 +2400,25 @@ snapshots:
     optionalDependencies:
       '@gasboost/client': 0.5.0
 
-  '@gasboost/auth-client@0.6.0(@gasboost/client@0.6.0)':
-    optionalDependencies:
-      '@gasboost/client': 0.6.0
-
   '@gasboost/auth-client@0.8.0(@gasboost/client@0.6.0)':
     optionalDependencies:
       '@gasboost/client': 0.6.0
 
-  '@gasboost/auth-sheetorm@0.4.2(@gasboost/auth@0.11.0)(@gasboost/sheetorm@4.0.0(zod@4.6.7))':
+  '@gasboost/auth-sheetorm@0.5.1(@gasboost/auth@0.12.0)(@gasboost/sheetorm@4.0.0(zod@4.6.7))':
     dependencies:
-      '@gasboost/auth': 0.11.0
+      '@gasboost/auth': 0.12.0
       '@gasboost/sheetorm': 4.0.0(zod@4.6.7)
       zod: 4.6.7
 
-  '@gasboost/auth@0.11.0':
+  '@gasboost/auth@0.12.0':
     dependencies:
       '@gasboost/table': 0.1.0(zod@4.6.7)
       zod: 4.6.7
 
-  '@gasboost/bootstrap@0.5.0(@gasboost/auth@0.11.0)(react@19.3.1)':
+  '@gasboost/bootstrap@0.5.0(@gasboost/auth@0.12.0)(react@19.3.1)':
     dependencies:
       '@gasboost/app': 5.5.0
-      '@gasboost/auth': 0.11.0
+      '@gasboost/auth': 0.12.0
     optionalDependencies:
       react: 19.3.1
 

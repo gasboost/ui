@@ -59,6 +59,7 @@ export function SignInPage() {
     formState: { errors, isValid },
   } = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
+    mode: "onChange",
     shouldUseNativeValidation: true,
   });
 

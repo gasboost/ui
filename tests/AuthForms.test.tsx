@@ -51,11 +51,16 @@ function fill(label: string, value: string) {
   return input;
 }
 
-it("submits registered sign-in values and navigates home", async () => {
-  const { router, form } = mount();
+it("enables sign-in after valid input and navigates home by button click", async () => {
+  const { router } = mount();
+  const button = screen.getByRole("button", {
+    name: "ログイン",
+  }) as HTMLButtonElement;
+  expect(button.disabled).toBe(true);
   fill("メールアドレス", " alice@example.com ");
   fill("パスワード", " secret ");
-  fireEvent.submit(form);
+  await waitFor(() => expect(button.disabled).toBe(false));
+  fireEvent.click(button);
   await waitFor(() =>
     expect(signIn).toHaveBeenCalledWith({
       email: "alice@example.com",

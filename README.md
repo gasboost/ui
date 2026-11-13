@@ -74,7 +74,7 @@ export const policy = new AuthorizationPolicy({
   .linkRole("staff", { staff: ["read"] });
 ```
 
-バックエンドは `@gasboost/auth@^0.10.0` / `@gasboost/auth-app@^0.7.0`、フロントエンドは `@gasboost/auth-client@^0.6.0` を使用します。SheetORMの認証repositoryを使う場合は `@gasboost/auth-sheetorm@^0.4.2` が必要です。既存の `AppsScriptAuth` オプションに以下を追加し、そのauthを `handlers(auth)` に渡してください。
+バックエンドは `@gasboost/auth@^0.12.0` / `@gasboost/auth-app@^0.9.0`、フロントエンドは `@gasboost/auth-client@^0.8.0` を使用します。SheetORMの認証repositoryを使う場合は `@gasboost/auth-sheetorm@^0.5.1` が必要です。既存の `AppsScriptAuth` オプションに以下を追加し、そのauthを `handlers(auth)` に渡してください。
 
 ```ts
 user: {
@@ -97,47 +97,54 @@ import { AuthGuard, PermissionGuard } from "./frontend/components/Guard";
 <Routes>
   <Route path={routes.auth.signIn} element={<LoginPage />} />
   <Route path={routes.system.forbidden} element={<ForbiddenPage />} />
-  <Route
-    path="/account"
-    element={
-      <AuthGuard>
-        <AccountPage />
-      </AuthGuard>
-    }
-  />
-  <Route
-    path="/staff/new"
-    element={
-      <PermissionGuard requirement={{ staff: ["create"] }}>
-        <CreateEmployeePage />
-      </PermissionGuard>
-    }
-  />
+  <Route element={<AuthGuard />}>
+    <Route path="/account" element={<AccountPage />} />
+  </Route>
+  <Route element={<PermissionGuard requirement={{ staff: ["create"] }} />}>
+    <Route path="/staff/new" element={<CreateEmployeePage />} />
+  </Route>
 </Routes>;
 ```
 
 両Guardはセッション復元中や認証操作中、および `useAuth().isSessionRestoreFailed` がtrueの間は何も表示しません。復元失敗時にAuthClientが古いユーザー・token・permissionsを保持していても、保護ページは表示せず、画面遷移もしません。復元失敗の表示や再試行UIが必要な場合はGuardの外側で同フラグを参照してください。復元が正常に完了して未認証なら、ログイン画面へ `replace` で遷移します。`PermissionGuard` は `policy.can(user.data.permissions, requirement)` で同期判定し、権限不足ならforbidden画面へ遷移します。判定のためのRPCは発行しません（AuthProviderによるセッション復元は別途行われます）。`requirement` は共有policyから推論され、不正なresource/actionは型エラーになります。
 
-Guardはページアクセス用です。ボタンの表示制御には `policy.can()` を直接使ってください。**バックエンドでも実行時の認可が必要です。** クライアントのpermissionsはログイン・セッション復元等で取得した時点の情報です。
+Guardはページアクセス用です。ボタンの表示制御には `Can` または `policy.can()` を使ってください。**バックエンドでも実行時の認可が必要です。** クライアントのpermissionsはログイン・セッション復元等で取得した時点の情報です。
+
+## ログイン・アカウント登録ページ
+
+```sh
+pnpm dlx shadcn@latest add gasboost/ui/sign-in-page gasboost/ui/sign-up-page
+```
+
+`components/SignInPage.tsx` と `components/SignUpPage.tsx`、パスワードの表示切り替えができる `components/ui/PasswordInput.tsx`、必要なフォーム・UI依存関係を導入します。入力検証、API呼び出し、エラー表示は各Page内にあります。PasswordInputのみ必要な場合は `gasboost/ui/password-input` を指定します。
+
+PageはRouterと `QueryClientProvider` の内側に配置し、認証状態を使う画面には `AuthProvider` を配置してください。利用側で以下のRouteを登録します。
+
+```tsx
+<Route path={routes.auth.signIn} element={<SignInPage />} />
+<Route path={routes.auth.signUp} element={<SignUpPage />} />
+```
+
+既存のroutesを保持する場合は `routes.home`、`routes.auth.signIn`、`routes.auth.signUp`、`routes.system.bootstrap`、`routes.system.forbidden` を追加してください。認証成功後は `routes.home` へ遷移します。認証エラーコードを返すため、バックエンドでは `handlers(auth)` の前に `authErrorHandler()` を登録してください。Guardが参照する共有policyとバックエンドは利用側で用意します。
 
 ## 開発・検証
 
 ```sh
-pnpm install --frozen-lockfile
+pnpm install --frozen-lockfile --strict-peer-dependencies
 pnpm format
 pnpm typecheck
 pnpm test
 pnpm registry:smoke
 ```
 
-`registry:smoke` はregistryをbuildし、一時的なconsumerへ実際のshadcn CLIで依存を含めてインストールします。`@gasboost/react@^0.4.1` の依存宣言と復元失敗フラグの型、共有policyからの型推論、不正なresource/actionの型エラー、上書きを断った既存routesの保持を確認します。npmへのアクセスが必要です。生成物は `dist/registry` に出力し、Gitの管理対象に含めません。GAS実環境へのデプロイは行いません。
+`registry:smoke` はregistryをbuildし、一時的なconsumerへ認証PageとBootstrapを実際のshadcn CLIで依存を含めてインストールし、strict peer条件と配布ソースの型チェックを確認します。`@gasboost/react@^0.4.1` の依存宣言と復元失敗フラグの型、共有policyからの型推論、不正なresource/actionの型エラー、上書きを断った既存routesの保持を確認します。npmへのアクセスが必要です。生成物は `dist/registry` に出力し、Gitの管理対象に含めません。GAS実環境へのデプロイは行いません。
 
 TypeScriptの `skipLibCheck` はGASとDOMの `MimeType` 宣言の競合を避けるために指定しています。配布ソースとconsumerの型チェックは有効です。
 
 ## Bootstrap の Provider 配置
 
 `pnpm dlx shadcn@latest add gasboost/ui/bootstrap` で初期設定ページと Guard を導入します。
-`BootstrapGuard` は未初期化なら `BootstrapPage` をその場で表示します。
+`BootstrapGuard` は未初期化なら `routes.system.bootstrap` へクエリ文字列を保持して遷移します。
 ページの `useMutation` に必要な `QueryClientProvider` は Guard の外側に、認証復元を行う `AuthProvider` は Guard の内側に配置します。
 
 ```tsx
@@ -146,11 +153,19 @@ TypeScriptの `skipLibCheck` はGASとDOMの `MimeType` 宣言の競合を避け
     <AppsScriptProvider client={client}>
       <QueryClientProvider client={queryClient}>
         <BootstrapProvider initialState={bootstrap}>
-          <BootstrapGuard>
-            <AuthProvider>
-              <App />
-            </AuthProvider>
-          </BootstrapGuard>
+          <Routes>
+            <Route path={routes.system.bootstrap} element={<BootstrapPage />} />
+            <Route element={<BootstrapGuard />}>
+              <Route
+                path="/*"
+                element={
+                  <AuthProvider>
+                    <App />
+                  </AuthProvider>
+                }
+              />
+            </Route>
+          </Routes>
         </BootstrapProvider>
       </QueryClientProvider>
     </AppsScriptProvider>
@@ -159,4 +174,4 @@ TypeScriptの `skipLibCheck` はGASとDOMの `MimeType` 宣言の競合を避け
 ```
 
 `bootstrap` は `lib/bootstrap.ts` の初期値、`queryClient` は TanStack Query の `new QueryClient()` です。
-`AppsScriptRouter` が同期した URL の token はリダイレクトせず `useSearchParams()` から読み取り、RPC の `initialized === true` の場合だけ `BootstrapProvider` の状態を更新します。
+`AppsScriptRouter` が同期した URL の token はクエリ文字列を保持した遷移後に `useSearchParams()` から読み取り、RPC の `initialized === true` の場合だけ `BootstrapProvider` の状態を更新します。

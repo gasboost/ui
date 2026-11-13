@@ -10,7 +10,7 @@
       "description": "Typed GAS BOOST RPC client with shared authentication storage and metadata.",
       "dependencies": [
         "@gasboost/client@^0.6.0",
-        "@gasboost/auth-client@^0.6.0"
+        "@gasboost/auth-client@^0.8.0"
       ],
       "files": [
         {
@@ -25,7 +25,7 @@
       "type": "registry:item",
       "title": "GAS BOOST Auth Client",
       "description": "GAS BOOST authentication using the RPC client's shared storage.",
-      "dependencies": ["@gasboost/auth-client@^0.6.0"],
+      "dependencies": ["@gasboost/auth-client@^0.8.0"],
       "registryDependencies": ["gasboost/ui/appsscript-client"],
       "files": [
         {
@@ -56,8 +56,8 @@
       "title": "GAS BOOST Guard",
       "description": "React guards for bootstrap, authentication, and authorization.",
       "dependencies": [
-        "@gasboost/auth@^0.10.0",
-        "@gasboost/bootstrap@^0.4.0",
+        "@gasboost/auth@^0.12.0",
+        "@gasboost/bootstrap@^0.5.0",
         "react-router-dom@^7.18.5"
       ],
       "registryDependencies": ["gasboost/ui/auth-context"],
@@ -80,7 +80,7 @@
       "title": "GAS BOOST Bootstrap",
       "description": "First-run initialization page with typed RPC errors and manual retry.",
       "dependencies": [
-        "@gasboost/bootstrap@^0.4.0",
+        "@gasboost/bootstrap@^0.5.0",
         "@gasboost/client@^0.6.0",
         "@tanstack/react-query@^5.107.1",
         "react-router-dom@^7.18.5"
@@ -102,6 +102,85 @@
           "path": "src/frontend/components/BootstrapPage.tsx",
           "type": "registry:file",
           "target": "~/src/frontend/components/BootstrapPage.tsx"
+        }
+      ]
+    },
+    {
+      "name": "password-input",
+      "type": "registry:component",
+      "title": "Password Input",
+      "description": "Password input with an accessible visibility toggle.",
+      "dependencies": ["lucide-react@^1.70.0"],
+      "registryDependencies": ["input-group"],
+      "files": [
+        {
+          "path": "src/frontend/components/ui/PasswordInput.tsx",
+          "type": "registry:file",
+          "target": "~/src/frontend/components/ui/PasswordInput.tsx"
+        }
+      ]
+    },
+    {
+      "name": "sign-in-page",
+      "type": "registry:item",
+      "title": "SignInPage",
+      "description": "Authentication form with validation, typed RPC error messages, and manual retry.",
+      "dependencies": [
+        "@gasboost/auth@^0.12.0",
+        "@gasboost/client@^0.6.0",
+        "@hookform/resolvers@^7.0.5",
+        "@tanstack/react-query@^5.107.1",
+        "react-hook-form@^7.91.0",
+        "react-router-dom@^7.18.5",
+        "zod@^4.6.7"
+      ],
+      "registryDependencies": [
+        "gasboost/ui/guard",
+        "gasboost/ui/auth-client",
+        "gasboost/ui/password-input",
+        "alert",
+        "button",
+        "card",
+        "input",
+        "label"
+      ],
+      "files": [
+        {
+          "path": "src/frontend/components/SignInPage.tsx",
+          "type": "registry:file",
+          "target": "~/src/frontend/components/SignInPage.tsx"
+        }
+      ]
+    },
+    {
+      "name": "sign-up-page",
+      "type": "registry:item",
+      "title": "SignUpPage",
+      "description": "Authentication form with validation, typed RPC error messages, and manual retry.",
+      "dependencies": [
+        "@gasboost/auth@^0.12.0",
+        "@gasboost/client@^0.6.0",
+        "@hookform/resolvers@^7.0.5",
+        "@tanstack/react-query@^5.107.1",
+        "react-hook-form@^7.91.0",
+        "react-router-dom@^7.18.5",
+        "zod@^4.6.7"
+      ],
+      "registryDependencies": [
+        "gasboost/ui/guard",
+        "gasboost/ui/auth-client",
+        "gasboost/ui/password-input",
+        "alert",
+        "button",
+        "card",
+        "input",
+        "label"
+      ],
+      "files": [
+        {
+          "path": "src/frontend/components/SignUpPage.tsx",
+          "type": "registry:file",
+          "target": "~/src/frontend/components/SignUpPage.tsx"
         }
       ]
     }
