@@ -183,6 +183,26 @@
           "target": "~/src/frontend/components/SignUpPage.tsx"
         }
       ]
+    },
+    {
+      "name": "auth-error-pages",
+      "type": "registry:item",
+      "title": "Authentication Error Pages",
+      "description": "Login guidance and permission denied pages for GAS BOOST guards.",
+      "dependencies": ["react-router-dom@^7.18.5"],
+      "registryDependencies": ["gasboost/ui/guard", "button", "card"],
+      "files": [
+        {
+          "path": "src/frontend/components/UnauthorizedPage.tsx",
+          "type": "registry:file",
+          "target": "~/src/frontend/components/UnauthorizedPage.tsx"
+        },
+        {
+          "path": "src/frontend/components/ForbiddenPage.tsx",
+          "type": "registry:file",
+          "target": "~/src/frontend/components/ForbiddenPage.tsx"
+        }
+      ]
     }
   ]
 }

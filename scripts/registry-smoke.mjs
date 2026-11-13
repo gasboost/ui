@@ -133,7 +133,9 @@ try {
     }),
   );
   const cli = join(root, "node_modules/shadcn/dist/index.js");
-  console.log("Installing auth pages and bootstrap into a fresh consumer...");
+  console.log(
+    "Installing auth pages, auth error pages, and bootstrap into a fresh consumer...",
+  );
   console.log(
     await run(process.execPath, [
       cli,
@@ -141,6 +143,7 @@ try {
       `${base}/sign-in-page.json`,
       `${base}/sign-up-page.json`,
       `${base}/bootstrap.json`,
+      `${base}/auth-error-pages.json`,
       "--yes",
     ]),
   );
@@ -176,6 +179,13 @@ export const policy = new AuthorizationPolicy({ staff: ["create", "read"] });\n`
     `import { PermissionGuard } from "./frontend/components/Guard";
 import { useAuth } from "./frontend/contexts/AuthContext";
 import { auth } from "./frontend/lib/auth";
+import { UnauthorizedPage } from "./frontend/components/UnauthorizedPage";
+import { ForbiddenPage } from "./frontend/components/ForbiddenPage";
+import { routes } from "./shared/routes";
+const unauthorized = <UnauthorizedPage />;
+const forbidden = <ForbiddenPage />;
+const customUnauthorized = <UnauthorizedPage signInTo={routes.auth.signIn} title="Sign in" description="Please sign in" actionLabel="Continue" />;
+const customForbidden = <ForbiddenPage returnTo={{ pathname: routes.home, search: "?from=forbidden" }} actionLabel="Return" />;
 const allowed = <PermissionGuard requirement={{ staff: ["read"] }} />;
 // @ts-expect-error Unknown resource
 const badResource = <PermissionGuard requirement={{ unknown: ["read"] }} />;
@@ -213,7 +223,7 @@ async function restored() {
   console.log(
     await run(
       process.execPath,
-      [cli, "add", `${base}/guard.json`, "--yes"],
+      [cli, "add", `${base}/auth-error-pages.json`, "--yes"],
       "n\n",
     ),
   );
