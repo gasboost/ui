@@ -9,7 +9,7 @@
       "title": "Apps Script Client",
       "description": "Typed GAS BOOST RPC client with shared authentication storage and metadata.",
       "dependencies": [
-        "@gasboost/client@^0.6.0",
+        "@gasboost/client@^0.7.0",
         "@gasboost/auth-client@^0.8.0"
       ],
       "files": [
@@ -270,6 +270,36 @@
           "path": "src/shared/routes.ts",
           "type": "registry:file",
           "target": "~/src/shared/routes.ts"
+        }
+      ]
+    },
+    {
+      "name": "server-job",
+      "type": "registry:item",
+      "title": "Server Job",
+      "description": "Compact RPC queue status menu with pending cancellation and failed job retry.",
+      "dependencies": [
+        "@gasboost/client@^0.7.0",
+        "@gasboost/react@^0.4.1",
+        "lucide-react@^1.70.0"
+      ],
+      "registryDependencies": [
+        "gasboost/ui/appsscript-client",
+        "badge",
+        "button",
+        "dropdown-menu",
+        "spinner"
+      ],
+      "files": [
+        {
+          "path": "src/frontend/components/ServerJobList.tsx",
+          "type": "registry:file",
+          "target": "~/src/frontend/components/ServerJobList.tsx"
+        },
+        {
+          "path": "src/frontend/components/ServerJobItem.tsx",
+          "type": "registry:file",
+          "target": "~/src/frontend/components/ServerJobItem.tsx"
         }
       ]
     }

@@ -198,6 +198,40 @@ import { ForbiddenPage } from "./frontend/components/ForbiddenPage";
 
 401 / 403相当の状態を案内するUIであり、GAS RPCがHTTP 401 / 403を返す前提はありません。表示先は利用側のRouter設定で決まります。バックエンドの実行時認可も引き続き必要です。
 
+## RPCジョブの状況・再試行
+
+```sh
+pnpm dlx shadcn@latest add gasboost/ui/server-job
+```
+
+`ServerJobList.tsx` / `ServerJobItem.tsx` と、Badge / Button / DropdownMenu / Spinnerを導入します。`@gasboost/client@^0.7.0` と `@gasboost/react@^0.4.1` を使用します。
+
+既存の `src/frontend/lib/appsscript.ts` をカスタマイズしている場合は上書きを断り、**既存の呼び出しから `jobs` もexport**してください。クライアントを二重生成すると別のキューになります。
+
+```ts
+export const { client, jobs } = appsScriptClient<AppType>({
+  metadataProviders: [authMetadataProvider(authStorage)],
+});
+
+// 第2引数のlabelをそのまま表示します。省略時はRPCメソッド名です。
+await client.createEmployee({ name: "田中太郎" }, { label: "従業員の登録" });
+```
+
+RPCは自動でキューに入るため、`jobs.start()` でRPCを包まないでください。
+
+```tsx
+import { ServerJobList } from "./frontend/components/ServerJobList";
+
+// 利用側のヘッダーなどに配置します。専用LayoutやProviderは不要です。
+<ServerJobList />;
+```
+
+ジョブが0件なら非表示です。1件以上ならアイコンと件数だけを表示し、クリックすると各ジョブの名前・状態を確認できます。実行中のSpinnerを優先し、実行中がなく失敗があれば失敗アイコン、それ以外は時計アイコンになります。待機中だけ「キャンセル」、失敗時だけ「再試行」を表示します。行全体が1つのmenu itemで、矢印キーで移動しEnter / Spaceで操作でき、操作後も他のジョブが残っていればDropdownを開いたままにします。内部エラー情報は表示しません。
+
+`ServerJobItem` はStoreを購読せず、`job: AppsScriptJob<unknown>` と `onRetry` / `onCancel` を受け取る表示・操作部品です。DropdownMenu内で使います。
+
+ジョブはクライアントメモリ内のRPCキューです。成功するとStoreから削除され、成功履歴は残りません。サーバー永続化、リロード後の履歴、実行途中のキャンセル、進捗率、バックグラウンドでの継続実行を保証するものではありません。
+
 ## 開発・検証
 
 ```sh
@@ -208,7 +242,7 @@ pnpm test
 pnpm registry:smoke
 ```
 
-`registry:smoke` はregistryをbuildし、一時的なconsumerへ認証Page・パスワード再設定Page・認証エラーページとBootstrapを実際のshadcn CLIで依存を含めてインストールし、strict peer条件と配布ソースの型チェックを確認します。`@gasboost/react@^0.4.1` の依存宣言と復元失敗フラグの型、共有policyからの型推論、不正なresource/actionの型エラー、上書きを断った既存routesの保持を確認します。パスワード再発行・再設定Pageはそれぞれ単独でもインストール・型チェックします。npmへのアクセスが必要です。生成物は `dist/registry` に出力し、Gitの管理対象に含めません。GAS実環境へのデプロイは行いません。
+`registry:smoke` はregistryをbuildし、一時的なconsumerへ認証Page・パスワード再設定Page・認証エラーページ・ServerJobとBootstrapを実際のshadcn CLIで依存を含めてインストールし、strict peer条件と配布ソースの型チェックを確認します。`@gasboost/react@^0.4.1` の依存宣言と復元失敗フラグの型、共有policyからの型推論、不正なresource/actionの型エラー、上書きを断った既存routesの保持を確認します。パスワード再発行・再設定Pageはそれぞれ単独でもインストール・型チェックします。npmへのアクセスが必要です。生成物は `dist/registry` に出力し、Gitの管理対象に含めません。GAS実環境へのデプロイは行いません。
 
 TypeScriptの `skipLibCheck` はGASとDOMの `MimeType` 宣言の競合を避けるために指定しています。配布ソースとconsumerの型チェックは有効です。
 
