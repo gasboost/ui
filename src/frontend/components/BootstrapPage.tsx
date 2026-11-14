@@ -13,7 +13,7 @@ import { BOOTSTRAP_ERROR_CODES } from "@gasboost/bootstrap/errors";
 import { AppsScriptRpcError } from "@gasboost/client";
 import { useMutation } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
-import { client } from "../lib/appsscript";
+import { client } from "../lib/auth-rpc";
 
 function getBootstrapErrorMessage(error: unknown): string {
   if (error instanceof AppsScriptRpcError) {

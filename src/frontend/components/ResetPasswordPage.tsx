@@ -18,7 +18,7 @@ import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { routes } from "../../shared/routes";
-import { client } from "../lib/appsscript";
+import { client } from "../lib/auth-rpc";
 
 const schema = z
   .object({

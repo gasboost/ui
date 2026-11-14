@@ -12,5 +12,6 @@
       "@/*": ["./src/frontend/*"]
     }
   },
-  "include": ["src", "tests"]
+  "include": ["src", "tests"],
+  "exclude": ["src/registry"]
 }
