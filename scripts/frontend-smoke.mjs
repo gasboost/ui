@@ -204,6 +204,13 @@ try {
         for (const f of ["auth.ts", "policy.ts", "tables.ts"])
           await cp(join(root, "src/shared", f), join(cwd, "src/shared", f));
         if (realtime) {
+          await writeFile(
+            authPath,
+            (await readFile(authPath, "utf8")).replace(
+              "  repository,",
+              '  repository,\n  hooks: { afterSignIn: () => ({ customToken: "fixture" }) },',
+            ),
+          );
           const path = join(cwd, "src/backend/main.ts");
           await writeFile(
             path,

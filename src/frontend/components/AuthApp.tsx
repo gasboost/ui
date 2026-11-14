@@ -11,9 +11,9 @@ import { useBootstrap } from "@gasboost/bootstrap/react";
 import { AuthProvider } from "../contexts/AuthContext";
 
 export function AuthApp({
-  sessionElement = <Outlet />,
+  sessionEffects,
 }: {
-  sessionElement?: import("react").ReactElement;
+  sessionEffects?: import("react").ReactNode;
 }) {
   return (
     <Routes>
@@ -22,19 +22,15 @@ export function AuthApp({
         <Route
           element={
             <AuthProvider>
+              {sessionEffects}
               <SessionRoutes />
             </AuthProvider>
           }
         >
           <Route path={routes.auth.signIn} element={<AppsScriptSignInPage />} />
           <Route element={<AuthGuard />}>
-            <Route element={sessionElement}>
-              <Route path={routes.home} element={<Account />} />
-              <Route
-                path={routes.system.forbidden}
-                element={<ForbiddenPage />}
-              />
-            </Route>
+            <Route path={routes.home} element={<Account />} />
+            <Route path={routes.system.forbidden} element={<ForbiddenPage />} />
           </Route>
           <Route path="*" element={<Navigate to={routes.home} replace />} />
         </Route>

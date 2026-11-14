@@ -72,17 +72,51 @@
       ]
     },
     {
-      "name": "auth-context",
+      "name": "auth-context-base",
       "type": "registry:item",
-      "title": "GAS BOOST Auth Context",
+      "title": "GAS BOOST Auth Context base",
       "description": "React context for GAS BOOST authentication.",
       "dependencies": ["@gasboost/react@^0.4.1"],
-      "registryDependencies": ["gasboost/ui/auth-client"],
+      "registryDependencies": [],
       "files": [
         {
           "path": "src/frontend/contexts/AuthContext.tsx",
           "type": "registry:file",
           "target": "~/src/frontend/contexts/AuthContext.tsx"
+        }
+      ]
+    },
+    {
+      "name": "auth-context",
+      "type": "registry:item",
+      "title": "GAS BOOST Auth Context",
+      "description": "React context for GAS BOOST authentication.",
+      "dependencies": ["@gasboost/react@^0.4.1"],
+      "registryDependencies": [
+        "gasboost/ui/auth-client",
+        "gasboost/ui/auth-context-base"
+      ],
+      "files": []
+    },
+    {
+      "name": "guard-base",
+      "type": "registry:item",
+      "title": "GAS BOOST Guard base",
+      "description": "React guards for bootstrap, authentication, and authorization.",
+      "dependencies": [
+        "@gasboost/auth@^0.12.0",
+        "@gasboost/bootstrap@^0.5.0",
+        "react-router-dom@^7.18.5"
+      ],
+      "registryDependencies": [
+        "gasboost/ui/auth-context-base",
+        "gasboost/ui/routes"
+      ],
+      "files": [
+        {
+          "path": "src/frontend/components/Guard.tsx",
+          "type": "registry:file",
+          "target": "~/src/frontend/components/Guard.tsx"
         }
       ]
     },
@@ -98,20 +132,14 @@
       ],
       "registryDependencies": [
         "gasboost/ui/auth-context",
-        "gasboost/ui/routes"
+        "gasboost/ui/guard-base"
       ],
-      "files": [
-        {
-          "path": "src/frontend/components/Guard.tsx",
-          "type": "registry:file",
-          "target": "~/src/frontend/components/Guard.tsx"
-        }
-      ]
+      "files": []
     },
     {
-      "name": "bootstrap",
+      "name": "bootstrap-base",
       "type": "registry:item",
-      "title": "GAS BOOST Bootstrap",
+      "title": "GAS BOOST Bootstrap base",
       "description": "First-run initialization page with typed RPC errors and manual retry.",
       "dependencies": [
         "@gasboost/bootstrap@^0.5.0",
@@ -120,7 +148,7 @@
         "react-router-dom@^7.18.5"
       ],
       "registryDependencies": [
-        "gasboost/ui/guard",
+        "gasboost/ui/guard-base",
         "gasboost/ui/auth-rpc",
         "alert",
         "button",
@@ -139,6 +167,23 @@
           "target": "~/src/frontend/components/BootstrapPage.tsx"
         }
       ]
+    },
+    {
+      "name": "bootstrap",
+      "type": "registry:item",
+      "title": "GAS BOOST Bootstrap",
+      "description": "First-run initialization page with typed RPC errors and manual retry.",
+      "dependencies": [
+        "@gasboost/bootstrap@^0.5.0",
+        "@gasboost/client@^0.6.0",
+        "@tanstack/react-query@^5.107.1",
+        "react-router-dom@^7.18.5"
+      ],
+      "registryDependencies": [
+        "gasboost/ui/guard",
+        "gasboost/ui/bootstrap-base"
+      ],
+      "files": []
     },
     {
       "name": "password-input",
@@ -222,13 +267,13 @@
       ]
     },
     {
-      "name": "auth-error-pages",
+      "name": "auth-error-pages-base",
       "type": "registry:item",
-      "title": "Authentication Error Pages",
+      "title": "Authentication Error Pages base",
       "description": "Login guidance and permission denied pages for GAS BOOST guards.",
       "dependencies": ["react-router-dom@^7.18.5"],
       "registryDependencies": [
-        "gasboost/ui/guard",
+        "gasboost/ui/guard-base",
         "button",
         "card",
         "gasboost/ui/ui-dependencies"
@@ -245,6 +290,18 @@
           "target": "~/src/frontend/components/ForbiddenPage.tsx"
         }
       ]
+    },
+    {
+      "name": "auth-error-pages",
+      "type": "registry:item",
+      "title": "Authentication Error Pages",
+      "description": "Login guidance and permission denied pages for GAS BOOST guards.",
+      "dependencies": ["react-router-dom@^7.18.5"],
+      "registryDependencies": [
+        "gasboost/ui/guard",
+        "gasboost/ui/auth-error-pages-base"
+      ],
+      "files": []
     },
     {
       "name": "forgot-password-page",
@@ -374,12 +431,12 @@
       ]
     },
     {
-      "name": "appsscript-sign-in-page",
+      "name": "appsscript-sign-in-page-base",
       "type": "registry:item",
-      "title": "appsscript-sign-in-page",
+      "title": "appsscript-sign-in-page base",
       "dependencies": ["react-router-dom@^7.18.5"],
       "registryDependencies": [
-        "gasboost/ui/auth-context",
+        "gasboost/ui/auth-context-base",
         "gasboost/ui/routes",
         "button",
         "card",
@@ -392,6 +449,17 @@
           "target": "~/src/frontend/components/AppsScriptSignInPage.tsx"
         }
       ]
+    },
+    {
+      "name": "appsscript-sign-in-page",
+      "type": "registry:item",
+      "title": "appsscript-sign-in-page",
+      "dependencies": ["react-router-dom@^7.18.5"],
+      "registryDependencies": [
+        "gasboost/ui/auth-context",
+        "gasboost/ui/appsscript-sign-in-page-base"
+      ],
+      "files": []
     },
     {
       "name": "frontend",
@@ -432,9 +500,9 @@
         "react-router-dom@^7.18.5"
       ],
       "registryDependencies": [
-        "gasboost/ui/bootstrap",
-        "gasboost/ui/appsscript-sign-in-page",
-        "gasboost/ui/auth-error-pages",
+        "gasboost/ui/bootstrap-base",
+        "gasboost/ui/appsscript-sign-in-page-base",
+        "gasboost/ui/auth-error-pages-base",
         "gasboost/ui/query-client",
         "gasboost/ui/frontend-style"
       ],
@@ -456,7 +524,10 @@
       "type": "registry:item",
       "title": "frontend-auth",
       "dependencies": [],
-      "registryDependencies": ["gasboost/ui/frontend-auth-shell"],
+      "registryDependencies": [
+        "gasboost/ui/frontend-auth-shell",
+        "gasboost/ui/auth-client"
+      ],
       "files": [
         {
           "path": "src/frontend/App.tsx",
@@ -474,17 +545,15 @@
         "@gasboost/replica@^0.3.1",
         "@gasboost/realtime-firebase@^0.9.0"
       ],
-      "registryDependencies": ["gasboost/ui/frontend-auth-shell"],
+      "registryDependencies": [
+        "gasboost/ui/frontend-auth-shell",
+        "gasboost/ui/auth-rpc"
+      ],
       "files": [
         {
-          "path": "src/registry/frontend-auth-realtime/App.tsx",
+          "path": "src/frontend/AppRealtime.tsx",
           "type": "registry:file",
           "target": "~/src/frontend/App.tsx"
-        },
-        {
-          "path": "src/frontend/components/RealtimeGuard.tsx",
-          "type": "registry:file",
-          "target": "~/src/frontend/components/RealtimeGuard.tsx"
         },
         {
           "path": "src/frontend/lib/firebase.ts",
@@ -495,6 +564,16 @@
           "path": "src/frontend/lib/replica.ts",
           "type": "registry:file",
           "target": "~/src/frontend/lib/replica.ts"
+        },
+        {
+          "path": "src/registry/frontend-auth-realtime/auth.ts",
+          "type": "registry:file",
+          "target": "~/src/frontend/lib/auth.ts"
+        },
+        {
+          "path": "src/frontend/hooks/useRtdb.ts",
+          "type": "registry:file",
+          "target": "~/src/frontend/hooks/useRtdb.ts"
         }
       ]
     }

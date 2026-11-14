@@ -20,7 +20,7 @@ Frontend無効の構成では利用しません。React 19、Tailwind CSS v4、s
 
 ### createとの責務境界
 
-RegistryはFrontendと`src/shared/routes.ts`だけを所有します。Backend、DB、認証サーバー、共有policy・テーブル定義、`index.html`、Vite/Vitest/TypeScript設定、環境変数、Firebase Rulesの生成はcreate側の責務です。createはRegistry所有ファイルを先に生成せず、shadcn CLIに生成を任せてください。`src/shared/routes.ts`は`routes` Itemだけが配布し、個別Itemもこの依存を共有します。`lib/utils.ts`は配布せず、標準shadcn側の管理に任せます。`vite-env.d.ts`も配布せず、createのtsconfigで`types: ["vite/client"]`を指定します。
+RegistryはFrontendと`src/shared/routes.ts`だけを所有します。Backend、DB、認証サーバー、共有policy・テーブル定義、`index.html`、Vite/Vitest/TypeScript設定、環境変数、Firebase Rulesの生成はcreate側の責務です。createはRegistry所有ファイルを先に生成せず、shadcn CLIに生成を任せてください。`src/shared/routes.ts`は`routes` Itemだけが配布し、個別Itemもこの依存を共有します。認証UIの`*-base` Itemは共通ソースを所有し、既存の個別Itemは標準`auth-client`と組み合わせます。完成形は同じ共通ソースに対して標準／Realtimeの認証実装を1つだけ選び、`auth.ts`の配布先を衝突させません。`lib/utils.ts`は配布せず、標準shadcn側の管理に任せます。`vite-env.d.ts`も配布せず、createのtsconfigで`types: ["vite/client"]`を指定します。
 
 Backendの`src/backend/main.ts`から`InferAppsScript<typeof app>`で推論した`AppType`をexportしてください。認証なしは空のRPC契約でも起動でき、Databaseの有無でFrontendコードは変わりません。
 
@@ -56,11 +56,30 @@ VITE_FIREBASE_APP_ID=
 
 BackendはFirebase Auth Hookと、認証middlewareの**後**に登録した`firebaseAuthHandlers()`による`issueFirebaseCustomToken()`を提供します。UIDは検証済みGAS Sessionの`userId`と一致させます。Hook、秘密鍵、RLS、RTDB publish、Rulesはcreate側に実装し、Registryには含めません。
 
-`RealtimeGuard`はセッション復元後にFirebaseのUIDを確認し、不一致なら認証済みRPCからCustom Tokenを取得して同期します。同期完了前や失敗時は保護画面を表示せず、失敗時は手動再試行できます。SDKの外部ログアウトも検出します。破棄時は購読、Queryキャッシュ、Firebase認証を解除します。
+画面のアクセス制御は既存の`AuthGuard`がGASセッションに基づいて行います。Realtime版の`lib/auth.ts`は`appsScriptAuth`の`externalAuth.getUserId/signIn/signOut`でFirebaseのUIDを同期します。ログイン時は`hooks.afterSignIn`でBackend Hookの`hooks.customToken`をSDKへ渡し、Queryキャッシュを破棄します。`afterSignOut`でもQueryキャッシュを破棄し、Firebaseのログアウトは`externalAuth.signOut`に任せます。Backend HookはすべてのSign In / Sign Up結果に`{ customToken: string }`を返す契約です。
 
-[現行Realtime API](https://github.com/gasboost/db/tree/main/packages/realtime-firebase)のRTDBには`syncVersions`の更新通知だけが置かれます。認証後の購読でQueryをinvalidateし、利用側のQueryが認可済みRPCから再取得します。RTDBから業務レコードを直接Replicaへ流し込みません。`lib/replica.ts`は業務定義を含まない空のReplicaです。業務機能を追加する際は共有の業務テーブルだけを登録し、Queryの取得処理でRPCの結果を`replica.sync(tableName, records)`へ渡してください。Authテーブルは登録しません。アカウント切替を実装する際は業務Replicaの破棄・分離も実装してください。
+起動時は`AuthProvider`がGASセッションを復元した後、App内の副作用から`auth.sync()`を呼びます。Firebaseが未認証・別UIDなら`issueFirebaseCustomToken()`で修復し、GASセッションがなければ外部セッションを解除します。この同期が失敗しても有効なGASセッションは保持し、保護画面やGAS RPCの利用をブロックしません。失敗はconsoleへ通知し、必要に応じて利用側から`auth.sync()`を再実行できます。`RealtimeGuard`は配布しません。
 
-ローカルEmulatorには`VITE_FIREBASE_AUTH_EMULATOR_URL=http://127.0.0.1:9099`、`VITE_FIREBASE_DATABASE_EMULATOR_HOST=127.0.0.1`、`VITE_FIREBASE_DATABASE_EMULATOR_PORT=9000`を設定できます。接続はViteのDEV時に限ります。`pnpm test:realtime`はdemoプロジェクトのAuth/RTDB Emulatorで認証同期・通知・再試行・解除とReplicaの現行APIを検証します（Java 21以上が必要）。実Firebaseプロジェクトの鍵、Rulesのデプロイ、GASとの本番接続は検証対象に含めません。
+[現行Realtime API](https://github.com/gasboost/db/tree/main/packages/realtime-firebase)のRTDBには`syncVersions`の更新通知だけが置かれます。業務機能で`useRtdb({ tables, queryKey })`を呼ぶと、Firebase認証状態を監視し、`versionPath(table)`で各テーブルの更新通知を購読します。最初の通知とversion変更時に指定Queryをinvalidateし、利用側のQueryが認可済みRPCから再取得します。通知が保留・拒否されても画面やRPCは利用でき、`error`で通知の問題を表示できます。Firebaseユーザー変更・ログアウト・Hookのunmount時に購読を解除し、Hook自身は認証操作を行いません。業務テーブルが未定義のため、完成形AppはこのHookを自動実行しません。
+
+```tsx
+import { useRtdb } from "./hooks/useRtdb";
+import { productsTable } from "../shared/tables"; // 利用側の業務定義
+
+// 再描画でも同じ配列を使います（動的な構成ではuseMemoを使用）。
+const tables = [productsTable] as const;
+const queryKey = ["products"] as const;
+
+function Products() {
+  const { error } = useRtdb({ tables, queryKey });
+  // 同じqueryKeyのuseQueryでGAS RPCから取得・表示します。
+  return error ? <p role="status">更新通知を利用できません。</p> : null;
+}
+```
+
+RTDBから業務レコードを直接Replicaへ流し込みません。`lib/replica.ts`は業務定義を含まない空のReplicaです。業務機能を追加する際は共有の業務テーブルだけを登録し、Queryの取得処理でRPCの結果を`replica.sync(tableName, records)`へ渡してください。Authテーブルは登録しません。アカウント切替を実装する際は業務Replicaの破棄・分離も実装してください。
+
+ローカルEmulatorには`VITE_FIREBASE_AUTH_EMULATOR_URL=http://127.0.0.1:9099`、`VITE_FIREBASE_DATABASE_EMULATOR_HOST=127.0.0.1`、`VITE_FIREBASE_DATABASE_EMULATOR_PORT=9000`を設定できます。接続はViteのDEV時に限ります。`pnpm test:realtime`はdemoプロジェクトのAuth/RTDB Emulatorで認証同期・通知・同期失敗時のGAS画面継続・解除とReplicaの現行APIを検証します（Java 21以上が必要）。実Firebaseプロジェクトの鍵、Rulesのデプロイ、GASとの本番接続は検証対象に含めません。
 
 ### 既存クライアントの移行
 
