@@ -34,7 +34,7 @@ const { forgotPassword, resetPassword, getLocation } = vi.hoisted(() => {
   });
   return { forgotPassword: vi.fn(), resetPassword: vi.fn(), getLocation };
 });
-vi.mock("../src/frontend/lib/appsscript", () => ({
+vi.mock("../src/frontend/lib/auth-rpc", () => ({
   client: { forgotPassword, resetPassword },
 }));
 beforeEach(() => {

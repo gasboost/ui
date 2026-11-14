@@ -2,3 +2,7 @@
 /.env
 /.clasp.json
 /dist
+
+/firebase-debug.log
+/database-debug.log
+/.firebase

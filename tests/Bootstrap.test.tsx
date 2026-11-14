@@ -14,7 +14,7 @@ import { HashRouter, Link, Outlet, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { BootstrapGuard } from "../src/frontend/components/Guard";
 import { AuthProvider } from "../src/frontend/contexts/AuthContext";
-import { client } from "../src/frontend/lib/appsscript";
+import { client } from "../src/frontend/lib/auth-rpc";
 import { BootstrapPage } from "../src/frontend/components/BootstrapPage";
 import { routes } from "../src/shared/routes";
 import { rpc, storage, testAuth, user } from "./fixtures/auth";
@@ -30,7 +30,7 @@ const { initializeApp, getLocation } = vi.hoisted(() => {
   return { initializeApp: vi.fn(), getLocation };
 });
 
-vi.mock("../src/frontend/lib/appsscript", () => ({
+vi.mock("../src/frontend/lib/auth-rpc", () => ({
   client: { initializeApp },
 }));
 vi.mock("../src/frontend/lib/auth", async () => ({

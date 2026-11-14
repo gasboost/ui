@@ -4,7 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { createRoot } from "react-dom/client";
 import { HashRouter } from "react-router-dom";
 import App from "./App";
-import { client } from "./lib/appsscript";
+import { client } from "./lib/auth-rpc";
 import { bootstrap } from "./lib/bootstrap";
 import { queryClient } from "./lib/query";
 import "./style.css";

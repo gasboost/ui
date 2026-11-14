@@ -2,6 +2,70 @@
 
 GAS BOOST向けのフロントエンド連携を配布するshadcn GitHub registryです。
 
+## Capability別のアプリ骨格
+
+createはCapabilityに応じて、次の**いずれか1項目だけ**を選びます。同じプロジェクトに複数の完成形Itemを追加しないでください。
+
+| Capability                                      | コマンド                                                        |
+| ----------------------------------------------- | --------------------------------------------------------------- |
+| Frontendのみ／Database + Frontend               | `pnpm dlx shadcn@latest add gasboost/ui/frontend`               |
+| Database + Authentication + Frontend            | `pnpm dlx shadcn@latest add gasboost/ui/frontend-auth`          |
+| Database + Authentication + Frontend + Realtime | `pnpm dlx shadcn@latest add gasboost/ui/frontend-auth-realtime` |
+
+Frontend無効の構成では利用しません。React 19、Tailwind CSS v4、shadcnの`base-nova`スタイルを前提とします。`components.json`のaliasは`@/*` → `src/frontend/*`、Tailwind CSSの配置先は`src/frontend/style.css`とします。
+
+各Itemは`src/frontend/App.tsx`、`main.tsx`、`style.css`、型付きRPCクライアントと共有routesを導入します。認証なしはGASの親URLを同期する`AppsScriptRouter` → `HashRouter` → `AppsScriptProvider`だけを使い、Auth、Bootstrap、React Query、Firebaseの初期化や画面を導入しません。`@gasboost/react@0.4.3`自体は`@gasboost/auth-client`を推移依存に持つため、認証なしでもlockfileには含まれます（Registryの直接依存には追加しません）。この推移依存も除去するには`@gasboost/react`側のパッケージ分割が必要です。
+
+認証ありはさらに`QueryClientProvider` → `BootstrapProvider`を組み立て、初期化前はBootstrapだけを表示します。初期化後に`AuthProvider`をマウントし、未認証ならApps Scriptログイン、認証済みならアカウント名とログアウト操作を表示します。業務ページやダミーRPCは生成しません。`AuthApp.tsx`内のhome Routeを利用側の画面に置き換えて拡張できます。セッション復元失敗時は保護画面を隠し、再確認操作を表示します。
+
+### createとの責務境界
+
+RegistryはFrontendと`src/shared/routes.ts`だけを所有します。Backend、DB、認証サーバー、共有policy・テーブル定義、`index.html`、Vite/Vitest/TypeScript設定、環境変数、Firebase Rulesの生成はcreate側の責務です。createはRegistry所有ファイルを先に生成せず、shadcn CLIに生成を任せてください。`src/shared/routes.ts`は`routes` Itemだけが配布し、個別Itemもこの依存を共有します。`lib/utils.ts`は配布せず、標準shadcn側の管理に任せます。`vite-env.d.ts`も配布せず、createのtsconfigで`types: ["vite/client"]`を指定します。
+
+Backendの`src/backend/main.ts`から`InferAppsScript<typeof app>`で推論した`AppType`をexportしてください。認証なしは空のRPC契約でも起動でき、Databaseの有無でFrontendコードは変わりません。
+
+完成形の認証方式はcreateの現行方式に合わせた**Apps Script認証**です。Backendは`@gasboost/auth@^0.12.0` / `@gasboost/auth-app@^0.9.0`で`appsScript.enabled: true`、`authErrorHandler()`と`handlers(auth)`、`bootstrap.handlers()`を登録します。`initializeApp({ token })`は`{ initialized: true }`を返す契約です。既存Guardと同様、createは共有`policy.ts`と`user.data.permissions`を提供してください。登録済みユーザーで`signInAppsScript()`を使い、利用者の登録はBootstrap／管理者側で行います。完成形はemail/passwordのSignIn、SignUp、パスワード再設定画面を導入しません。既存の個別Itemは引き続きemail/passwordを有効にしたBackendで利用できます。
+
+### HTMLとBootstrapの契約
+
+createが生成するHTMLには`root`と`main.tsx`のエントリが必要です。認証ありでは、GAS配信とローカルViteの両方で次のJSONを**React起動前に**埋め込みます。
+
+```html
+<div id="root"></div>
+<script id="bootstrap-data" type="application/json">
+  { "initialized": false }
+</script>
+<script type="module" src="/src/frontend/main.tsx"></script>
+```
+
+`initialized`は必須のbooleanで、Backendの現在値を使います。未初期化は`false`、初期化済みは`true`です。`lib/bootstrap.ts`は存在・型を検証し、この公開値だけをProviderへ渡します。欠損や未置換のGASテンプレートをローカルで放置すると起動エラーになるので、createのVite側でも同じJSONを注入してください。tokenや管理者メール等の非公開Bootstrap状態は含めません。GASテンプレートにJSONを埋める際は`<`を`\u003c`、U+2028/U+2029もUnicode escapeし、scriptの終端を注入できないようにします。
+
+`AppsScriptRouter`がGAS親ページのquery/hashを同期し、BootstrapGuardはtokenのqueryを維持してBootstrapへ遷移します。初期化成功後はログインへ遷移します。認証なしのHTMLには`bootstrap-data`は不要です。
+
+### Realtime
+
+Realtime版だけがFirebase SDK、`@gasboost/realtime-firebase@^0.9.0`、`@gasboost/replica@^0.3.1`と接続ファイルを導入します。createは次のVite環境変数を用意します。
+
+```dotenv
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_DATABASE_URL=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_APP_ID=
+```
+
+BackendはFirebase Auth Hookと、認証middlewareの**後**に登録した`firebaseAuthHandlers()`による`issueFirebaseCustomToken()`を提供します。UIDは検証済みGAS Sessionの`userId`と一致させます。Hook、秘密鍵、RLS、RTDB publish、Rulesはcreate側に実装し、Registryには含めません。
+
+`RealtimeGuard`はセッション復元後にFirebaseのUIDを確認し、不一致なら認証済みRPCからCustom Tokenを取得して同期します。同期完了前や失敗時は保護画面を表示せず、失敗時は手動再試行できます。SDKの外部ログアウトも検出します。破棄時は購読、Queryキャッシュ、Firebase認証を解除します。
+
+[現行Realtime API](https://github.com/gasboost/db/tree/main/packages/realtime-firebase)のRTDBには`syncVersions`の更新通知だけが置かれます。認証後の購読でQueryをinvalidateし、利用側のQueryが認可済みRPCから再取得します。RTDBから業務レコードを直接Replicaへ流し込みません。`lib/replica.ts`は業務定義を含まない空のReplicaです。業務機能を追加する際は共有の業務テーブルだけを登録し、Queryの取得処理でRPCの結果を`replica.sync(tableName, records)`へ渡してください。Authテーブルは登録しません。アカウント切替を実装する際は業務Replicaの破棄・分離も実装してください。
+
+ローカルEmulatorには`VITE_FIREBASE_AUTH_EMULATOR_URL=http://127.0.0.1:9099`、`VITE_FIREBASE_DATABASE_EMULATOR_HOST=127.0.0.1`、`VITE_FIREBASE_DATABASE_EMULATOR_PORT=9000`を設定できます。接続はViteのDEV時に限ります。`pnpm test:realtime`はdemoプロジェクトのAuth/RTDB Emulatorで認証同期・通知・再試行・解除とReplicaの現行APIを検証します（Java 21以上が必要）。実Firebaseプロジェクトの鍵、Rulesのデプロイ、GASとの本番接続は検証対象に含めません。
+
+### 既存クライアントの移行
+
+RPC生成元の`lib/appsscript.ts`は認証なしの共有client/jobsをexportします。認証Itemは`lib/auth-rpc.ts`で既存clientに`withMetadataProviders()`を適用し、`authStorage`と認証付き`client`をexportします。RPCやジョブキューを二重生成しません。従来`appsscript.ts`から`authStorage`をimportしていた場合は`auth-rpc.ts`へ変更し、認証が必要な業務RPCや`AppsScriptProvider`もこちらのclientを使ってください。既存のカスタムクライアントを保持する場合は、上書きせずこの構成を統合してください。
+
 ## インストール
 
 RPCクライアントのみを導入する場合:
@@ -23,7 +87,7 @@ pnpm dlx shadcn@latest add gasboost/ui/auth-client
 - 利用側の`src/backend/main.ts`から、GAS BOOSTの`InferAppsScript<typeof app>`で推論した`AppType`をexportしてください。異なる構成では`appsscript.ts`の型importを調整してください。
 - 認証を使うバックエンドには`@gasboost/auth-app`の`handlers(auth)`を登録してください。バックエンドの実装・依存パッケージは利用側で用意します。
 
-`appsscript-client`は認証連携用の`authStorage`と`authMetadataProvider`も含み、`@gasboost/client`と`@gasboost/auth-client`を導入します。`auth-client`はその同じstorageインスタンスを`appsScriptAuth`に渡します。
+`appsscript-client`は`@gasboost/client`を導入します。`auth-client`は`auth-rpc`を介して認証metadataと共通storageを追加し、そのstorageを`appsScriptAuth`に渡します。
 
 ```ts
 import { auth } from "./lib/auth";
@@ -209,9 +273,7 @@ pnpm dlx shadcn@latest add gasboost/ui/server-job
 既存の `src/frontend/lib/appsscript.ts` をカスタマイズしている場合は上書きを断り、**既存の呼び出しから `jobs` もexport**してください。クライアントを二重生成すると別のキューになります。
 
 ```ts
-export const { client, jobs } = appsScriptClient<AppType>({
-  metadataProviders: [authMetadataProvider(authStorage)],
-});
+export const { client, jobs } = appsScriptClient<AppType>();
 
 // 第2引数のlabelをそのまま表示します。省略時はRPCメソッド名です。
 await client.createEmployee({ name: "田中太郎" }, { label: "従業員の登録" });
@@ -242,7 +304,7 @@ pnpm test
 pnpm registry:smoke
 ```
 
-`registry:smoke` はregistryをbuildし、一時的なconsumerへ認証Page・パスワード再設定Page・認証エラーページ・ServerJobとBootstrapを実際のshadcn CLIで依存を含めてインストールし、strict peer条件と配布ソースの型チェックを確認します。`@gasboost/react@^0.4.1` の依存宣言と復元失敗フラグの型、共有policyからの型推論、不正なresource/actionの型エラー、上書きを断った既存routesの保持を確認します。パスワード再発行・再設定Pageはそれぞれ単独でもインストール・型チェックします。npmへのアクセスが必要です。生成物は `dist/registry` に出力し、Gitの管理対象に含めません。GAS実環境へのデプロイは行いません。
+`registry:smoke` は完成形4構成を新規consumerへ導入し、strict peers、tsc、Vite dev起動とbuildを検証します。さらにregistryをbuildし、一時的なconsumerへ認証Page・パスワード再設定Page・認証エラーページ・ServerJobとBootstrapを実際のshadcn CLIで依存を含めてインストールし、strict peer条件と配布ソースの型チェックを確認します。`@gasboost/react@^0.4.1` の依存宣言と復元失敗フラグの型、共有policyからの型推論、不正なresource/actionの型エラー、上書きを断った既存routesの保持を確認します。パスワード再発行・再設定Pageはそれぞれ単独でもインストール・型チェックします。npmへのアクセスが必要です。生成物は `dist/registry` に出力し、Gitの管理対象に含めません。GAS実環境へのデプロイは行いません。
 
 TypeScriptの `skipLibCheck` はGASとDOMの `MimeType` 宣言の競合を避けるために指定しています。配布ソースとconsumerの型チェックは有効です。
 

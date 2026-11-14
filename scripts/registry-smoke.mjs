@@ -161,8 +161,23 @@ try {
       "--yes",
     ]),
   );
-  for (const item of items.values()) {
-    for (const file of item.files) {
+  for (const name of [
+    "routes",
+    "appsscript-client",
+    "auth-rpc",
+    "auth-client",
+    "auth-context",
+    "guard",
+    "bootstrap",
+    "password-input",
+    "sign-in-page",
+    "sign-up-page",
+    "auth-error-pages",
+    "forgot-password-page",
+    "reset-password-page",
+    "server-job",
+  ]) {
+    for (const file of items.get(name).files) {
       const installed = await readFile(
         join(consumer, file.target.replace(/^~\//, "")),
         "utf8",
@@ -197,7 +212,7 @@ import { UnauthorizedPage } from "./frontend/components/UnauthorizedPage";
 import { ForbiddenPage } from "./frontend/components/ForbiddenPage";
 import { routes } from "./shared/routes";
 import { ServerJobList } from "./frontend/components/ServerJobList";
-import { client, jobs } from "./frontend/lib/appsscript";
+import { client, jobs } from "./frontend/lib/auth-rpc";
 const serverJobs = <ServerJobList />;
 const subscription = jobs.subscribe(() => jobs.getSnapshot());
 const labeledRpc = client.forgotPassword({ email: "user@example.com" }, { label: "再発行" });
